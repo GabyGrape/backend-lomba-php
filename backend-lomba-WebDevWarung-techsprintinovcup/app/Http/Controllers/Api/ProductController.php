@@ -1,45 +1,66 @@
 <?php
 
-// namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-// use App\Http\Controllers\Controller;
-// use Illuminate\Http\Request;
-
-// class ProductController extends Controller
-// {
-    //
-// }
-namespace App\Http\Controllers;
-
-use App\Models\Product; // Jangan lupa import modelnya
+use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
-    public function index() 
+    // GET: List semua produk
+    public function index()
     {
-        // Ambil semua data produk dari database
         $products = Product::all();
-        
-        // Kirim sebagai JSON
-        return response()->json($products);
+        return response()->json(['data' => $products], 200);
     }
-    public function store(Request $request) 
-{
-    // 1. Validasi data yang masuk
-    $validated = $request->validate([
-        'name' => 'required|string',
-        'stock' => 'required|integer',
-        'price' => 'required|numeric',
-    ]);
 
-    // 2. Simpan ke database
-    $product = Product::create($validated);
+    // POST: Simpan produk baru
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama_menu' => 'required',
+            'harga'     => 'required|numeric',
+            'stok'      => 'required|integer',
+            'kategori'  => 'required',
+            'user_id'   => 'required',
+        ]);
 
-    // 3. Kasih respon sukses ke FE
-    return response()->json([
-        'message' => 'Produk berhasil ditambah!',
-        'data' => $product
-    ], 201);
-}
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $product = Product::create($request->all());
+        return response()->json(['message' => 'Produk berhasil dibuat', 'data' => $product], 201);
+    }
+
+    // GET: Detail satu produk
+    public function show($id)
+    {
+        $product = Product::find($id);
+        if (!$product) return response()->json(['message' => 'Produk tidak ditemukan'], 404);
+        
+        return response()->json(['data' => $product], 200);
+    }
+
+    // PUT/PATCH: Update produk
+    public function update(Request $request, $id)
+    {
+        $product = Product::find($id);
+        if (!$product) return response()->json(['message' => 'Produk tidak ditemukan'], 404);
+
+        $product->update($request->all());
+        return response()->json(['message' => 'Produk berhasil diupdate', 'data' => $product], 200);
+    }
+
+    // DELETE: Hapus produk
+    public function destroy($id)
+    {
+        $product = Product::find($id);
+        if (!$product) return response()->json(['message' => 'Produk tidak ditemukan'], 404);
+
+        $product->delete();
+        return response()->json(['message' => 'Produk berhasil dihapus'], 200);
+    }
 }
