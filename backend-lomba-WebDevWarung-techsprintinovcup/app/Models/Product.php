@@ -6,6 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    //
-    protected $fillable = ['name', 'stock', 'price'];
+    // Nama tabel di database
+    protected $table = 'products_'; 
+
+    // Kolom yang boleh diisi (sesuai list yang kamu kasih tadi)
+    protected $fillable = [
+        'nama_menu', 
+        'deskripsi', 
+        'harga', 
+        'gambar', 
+        'user_id', 
+        'status', 
+        'stok', 
+        'kategori'
+    ];
 }
