@@ -17,6 +17,10 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    //dashboard
+    Route::get('/dashboard/seller', fn() => view('dashboard.dashboard_seller'));
+
+
 });
 
 
