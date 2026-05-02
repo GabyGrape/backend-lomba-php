@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\CartController;
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::post('/products', [ProductController::class, 'store']);
@@ -19,5 +20,30 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 
+// Route Forgot Password (Opsi A)
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+
+// User Management
+// Route yang WAJIB login
+Route::middleware('auth:sanctum')->group(function () {
+    
+    // Logout harus di dalam sini karena kita perlu tahu siapa yang logout
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    // Endpoint Update Profile (BARU)
+    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
+
+    // Endpoint Management User
+    Route::get('/users', [AuthController::class, 'getAllUsers']);
+    Route::get('/users/search', [AuthController::class, 'getUserByEmail']);
+    Route::get('/users/{id}', [AuthController::class, 'getUserById']);
+    
+    // Jika kamu ingin namanya 'carts' (pakai s), tulis begini:
+    Route::post('/carts', [CartController::class, 'addToCart']);
+    Route::get('/carts', [CartController::class, 'getMyCart']);
+    Route::post('/user/qris', [AuthController::class, 'updateQris']);
+    
+    });
 
 Route::apiResource('products', ProductController::class);

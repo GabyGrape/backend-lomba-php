@@ -15,6 +15,10 @@ class User extends Authenticatable
     // Hubungkan model ini ke tabel users_ (kustom kamu)
     protected $table = 'users_';
 
+    // Tambahkan di bagian atas model User
+protected $appends = ['qris_url'];
+
+// Tambahkan method ini di dalam class User
     /**
      * Atribut yang boleh diisi secara massal.
      */
@@ -24,6 +28,9 @@ class User extends Authenticatable
         'password',
         'role',      // Tambahkan role karena ada di migration kamu
         'is_active',  // Tambahkan is_active
+        'nama_warung',
+        'alamat_warung',
+        'qris_path'
     ];
 
     /**
@@ -34,6 +41,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+    public function getQrisUrlAttribute()
+{
+    return $this->qris_path ? url('storage/' . $this->qris_path) : null;
+}
     /**
      * Casting tipe data otomatis.
      */
