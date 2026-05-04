@@ -18,7 +18,8 @@ return new class extends Migration
         // Disarankan ditambahkan agar tidak error jika pakai fitur Auth Laravel nanti
         $table->timestamp('email_verified_at')->nullable(); 
         $table->string('password');
-        $table->enum('role', ['pedagang', 'konsumen', 'user', 'admin', 'developer'])->default('user');
+        // $table->enum('role', ['pedagang', 'konsumen', 'user', 'admin', 'developer'])->default('user');
+        $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
         $table->boolean('is_active')->default(true);
         $table->rememberToken(); // Sangat disarankan untuk fitur login
         $table->timestamps();

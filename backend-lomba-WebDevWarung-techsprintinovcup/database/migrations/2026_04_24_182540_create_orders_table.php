@@ -10,17 +10,18 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained(); // Konsumen
-            $table->foreignId('merchant_id')->constrained('users'); // Pedagang
-            $table->decimal('total_price', 15, 2);
-            $table->enum('status', ['pending', 'ongoing', 'completed', 'declined'])->default('pending');
-            $table->string('payment_proof')->nullable(); // Path foto bukti transfer/SS QRIS
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('orders', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('user_id')->constrained('users_')->onDelete('cascade');
+        $table->foreignId('merchant_id')->constrained('users_')->onDelete('cascade');
+        $table->decimal('total_price', 12, 2);
+        $table->string('payment_proof')->nullable();
+        $table->string('status')->default('pending'); 
+        $table->timestamp('pickup_plan_at')->nullable();
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.

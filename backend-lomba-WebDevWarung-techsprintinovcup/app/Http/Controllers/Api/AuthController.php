@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Role; // Pastikan model Role sudah dibuat dan diimport
 
 class AuthController extends Controller
 {
@@ -39,17 +40,26 @@ class AuthController extends Controller
         'name' => 'required|string',
         'email' => 'required|string|email|unique:users_,email',
         'password' => 'required|string|min:6',
-        'role' => 'required|in:pedagang,konsumen,user,admin,developer',
+        // 'role' => 'required|in:pedagang,konsumen,user,admin,developer',
+        'role_name' => 'required|in:pedagang,konsumen', // Gunakan role_name untuk mencari ID
         // Tambahkan validasi opsional
         'nama_warung' => 'nullable|string',
         'alamat_warung' => 'nullable|string'
     ]);
+// Cari ID role di tabel roles
+    $role = \App\Models\Role::where('name', $fields['role_name'])->first();
+    if (!$role) {
+        return response([
+            'message' => 'Role yang dipilih tidak valid'
+        ], 400);
+    }
 
     $user = User::create([
         'name' => $fields['name'],
         'email' => $fields['email'],
         'password' => $fields['password'], 
-        'role' => $fields['role'],
+        // 'role' => $fields['role'],
+        'role_id' => $role->id, // Simpan ID-nya, bukan string namanya
         'nama_warung' => $fields['nama_warung'] ?? null, // Opsional
         'alamat_warung' => $fields['alamat_warung'] ?? null, // Opsional
         'is_active' => true 
@@ -59,7 +69,7 @@ class AuthController extends Controller
 
     return response([
         'message' => 'Registrasi Berhasil',
-        'user' => $user,
+        'user' => $user->load('role'),
         'token' => $token
     ], 201);
 }
@@ -177,7 +187,7 @@ public function resetPassword(Request $request) {
 public function getAllUsers(Request $request) {
     // Cek apakah user yang login memiliki role admin atau developer
     // Sesuai dengan enum yang kamu buat sebelumnya
-    if ($request->user()->role !== 'admin' && $request->user()->role !== 'developer') {
+    if ($request->user()->role->name !== 'admin' && $request->user()->role->name !== 'developer') {
         return response([
             'message' => 'Forbidden: Anda tidak memiliki akses ke halaman ini.'
         ], 403); // 403 adalah kode error Forbidden

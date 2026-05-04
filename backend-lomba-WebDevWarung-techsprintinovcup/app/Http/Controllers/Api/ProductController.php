@@ -23,8 +23,8 @@ class ProductController extends Controller
             'nama_menu' => 'required',
             'harga'     => 'required|numeric',
             'stok'      => 'required|integer',
-            'kategori'  => 'required',
-            'user_id'   => 'required',
+            'category_id' => 'required|exists:categories,id', // <--- Ubah ini
+            'user_id'     => 'required|exists:users_,id',
         ]);
 
         if ($validator->fails()) {
