@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\OrderController;
+use Illuminate\Http\Request;
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::post('/products', [ProductController::class, 'store']);
@@ -43,6 +45,30 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/carts', [CartController::class, 'addToCart']);
     Route::get('/carts', [CartController::class, 'getMyCart']);
     Route::post('/user/qris', [AuthController::class, 'updateQris']);
+    
+    // Untuk Konsumen
+    Route::post('/orders', [OrderController::class, 'store']);      // Buat pesanan baru
+    Route::get('/orders/history', [OrderController::class, 'index']); // Lihat riwayat belanja
+
+    // Untuk Pedagang (Merchant)
+    Route::get('/merchant/orders', [OrderController::class, 'merchantIndex']); // List pesanan masuk
+    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus']); // Update status (ongoing/completed/dll)
+
+
+    // Route untuk mengambil SEMUA order (biasanya untuk Admin)
+    Route::get('/orders', [OrderController::class, 'index']);
+    
+    // Route untuk membuat order baru (yang sudah kamu buat sebelumnya)
+    Route::post('/orders', [OrderController::class, 'store']);
+    
+    // Route untuk history belanja USER (Pelanggan)
+    Route::get('/orders/user/{id}', [OrderController::class, 'getByUserId']);
+    
+    // Route untuk pesanan masuk MERCHANT (Warung)
+    Route::get('/orders/merchant/{id}', [OrderController::class, 'getByMerchantId']);
+    
+    // Route untuk update status (PUT/PATCH)
+    Route::patch('/orders/{id}/status', [OrderController::class, 'updateStatus']);
     
     });
 

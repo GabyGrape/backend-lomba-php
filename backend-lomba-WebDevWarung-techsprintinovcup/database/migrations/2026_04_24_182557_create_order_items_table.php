@@ -10,16 +10,17 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->string('product_name'); // Simpan namanya langsung (snapshot)
-            $table->decimal('price', 15, 2); // Simpan harga saat dibeli (snapshot)
-            $table->integer('quantity');
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('order_items', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
+        // $table->foreignId('menu_id')->constrained('products_')->onDelete('cascade'); // Pastikan tabel menus sudah ada di migrasi sebelumnya
+        $table->foreignId('product_id')->constrained('products_')->onDelete('cascade');
+        $table->integer('quantity');
+        $table->decimal('price_at_purchase', 12, 2);
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.

@@ -18,6 +18,6 @@ class Product extends Model
         'user_id', 
         'status', 
         'stok', 
-        'kategori'
+        'category_id'
     ];
 }

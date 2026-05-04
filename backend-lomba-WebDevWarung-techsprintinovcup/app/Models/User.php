@@ -26,7 +26,8 @@ protected $appends = ['qris_url'];
         'name',
         'email',
         'password',
-        'role',      // Tambahkan role karena ada di migration kamu
+        'role',
+        'role_id',      // Tambahkan role karena ada di migration kamu
         'is_active',  // Tambahkan is_active
         'nama_warung',
         'alamat_warung',
@@ -41,6 +42,16 @@ protected $appends = ['qris_url'];
         'remember_token',
     ];
 
+    public function role()
+{
+    return $this->belongsTo(Role::class, 'role_id');
+}
+
+// Helper untuk cek role (sangat berguna untuk proteksi API)
+public function hasRole($roleName)
+{
+    return $this->role->name === $roleName;
+}
 
     public function getQrisUrlAttribute()
 {

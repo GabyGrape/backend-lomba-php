@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('carts_item', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cart_id')->constrained('carts')->onDelete('cascade');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products_')->onDelete('cascade');
             $table->integer('quantity')->default(1);
             // Kita simpan harga saat dimasukkan ke keranjang untuk jaga-jaga jika harga menu berubah
             $table->decimal('price_at_add', 10, 2); 
