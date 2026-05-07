@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Pembelian Makan</title>
+    <link rel="stylesheet" href="style_login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins&display=swap" rel="stylesheet">
+</head>
+
+<body class="auth-body">
+    <div class="container">
+        <div class="logo">
+            <img src="1x/logo.png" alt="Logo">
+        </div>
+        <div class="card">
+            <h1>REGISTER</h1>
+            <form>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Nama" required>
+                <select name="role">
+                    <option value="" disabled selected>Role</option>
+                    <option value="penjual">Penjual</option>
+                    <option value="pembeli">Pembeli</option>
+                </select>
+                <div class="password-box">
+                    <input type="password" id="passInput" placeholder="Password" required>
+                    <img src="Asset 5.png" class="toggle-password" id="eyeIcon" onclick="togglePassword()">
+                </div>
+                <a href="lupa_password.html" class="forgot">Lupa Password</a>
+                <button type="submit">REGISTER</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passInput = document.getElementById('passInput');
+            const eyeIcon = document.getElementById('eyeIcon');
+
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                eyeIcon.src = "1x/Asset 6.png";
+            } else {
+                passInput.type = "password";
+                eyeIcon.src = "1x/Asset 5.png";
+            }
+        }
+
+        document.getElementById('loginForm').onsubmit = function(e) {
+            e.preventDefault();
+            window.location.href = "hlm_pembeli.html";
+        }
+    </script>
+</body>
+
+</html>

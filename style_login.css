@@ -1,0 +1,151 @@
+/*reset global*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/*LAYOUT AUTH*/
+
+body.auth-body {
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.logo img {
+    width: 80px;
+    margin-bottom: 20px;
+    object-fit: contain;
+}
+
+
+/*style card*/
+
+.card {
+    background-color: #001a57;
+    padding: 40px 30px;
+    border-radius: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card h1 {
+    color: #ffb800;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+
+/*form elemen*/
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 50px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+
+/*Password Box*/
+
+.password-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.password-box input {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    border-radius: 50px;
+    border: none;
+    outline: none;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+
+/* Button Login/Daftar */
+
+button {
+    background-color: #ffb800;
+    color: white;
+    border: none;
+    width: 100%;
+    max-width: 250px;
+    margin: 10px auto;
+    padding: 12px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #e6a600;
+    transform: translateY(-2px);
+}
+
+
+/*link dan teks*/
+
+.register-text {
+    color: white !important;
+    font-size: 13px;
+    margin-top: 20px;
+}
+
+.register-text a {
+    color: #ffb800;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.forgot {
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    margin-top: -5px;
+    margin-bottom: 15px;
+    display: inline-block;
+    transition: 0.3s;
+    background: none;
+    padding: 0;
+}
+
+.forgot:hover {
+    color: #ffb800;
+    text-decoration: underline;
+}
