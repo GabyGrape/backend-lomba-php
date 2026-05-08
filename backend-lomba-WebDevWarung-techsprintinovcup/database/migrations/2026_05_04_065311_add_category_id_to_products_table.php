@@ -15,7 +15,7 @@ return new class extends Migration
         // Hapus kolom lama
         $table->dropColumn('kategori'); 
         // Tambah foreign key ke tabel categories
-        $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
+        $table->foreignId('category_id')->nullable>constrained('categories')->onDelete('set null');
     });
 }
 
