@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\CartController;
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::post('/products', [ProductController::class, 'store']);
@@ -18,19 +17,16 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-    //dashboard
+});//dashboard
     Route::get('/dashboard/seller', fn() => view('dashboard.dashboard_seller'));
 
 
-});
 
 // Route Forgot Password (Opsi A)
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
-// User Management
-// Route yang WAJIB login
-Route::middleware('auth:sanctum')->group(function () {
+
     
     // Logout harus di dalam sini karena kita perlu tahu siapa yang logout
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -48,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/carts', [CartController::class, 'getMyCart']);
     Route::post('/user/qris', [AuthController::class, 'updateQris']);
     
-    });
+  
+
 
 Route::apiResource('products', ProductController::class);
