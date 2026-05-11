@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>Login</title>
+  <title>Lupa Password</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -17,10 +17,13 @@
     }
 
     body{
+
       min-height:100vh;
+
       display:flex;
       justify-content:center;
       align-items:center;
+
       padding:20px;
 
       font-family:'Poppins',sans-serif;
@@ -35,7 +38,7 @@
 
     .container{
       width:100%;
-      max-width:400px;
+      max-width:420px;
     }
 
     .logo-wrapper{
@@ -45,9 +48,10 @@
     }
 
     .logo-wrapper img{
-      width:80px;
-      height:90px;
+      width:85px;
+      height:95px;
       object-fit:contain;
+      filter:drop-shadow(0 10px 20px rgba(0,0,0,.4));
     }
 
     .card{
@@ -55,17 +59,17 @@
       background:
       rgba(26,42,108,0.88);
 
-      backdrop-filter:blur(14px);
+      backdrop-filter:blur(16px);
 
       border:
       1px solid rgba(255,255,255,0.08);
 
-      border-radius:24px;
+      border-radius:28px;
 
-      padding:38px 32px;
+      padding:40px 34px;
 
       box-shadow:
-      0 20px 60px rgba(0,0,0,0.45);
+      0 20px 70px rgba(0,0,0,0.45);
 
       animation:fadeUp .5s ease;
 
@@ -73,10 +77,11 @@
     }
 
     .card:hover{
+
       transform:translateY(-3px);
 
       box-shadow:
-      0 25px 70px rgba(0,0,0,0.6);
+      0 28px 80px rgba(0,0,0,0.6);
     }
 
     @keyframes fadeUp{
@@ -94,6 +99,7 @@
     }
 
     .title{
+
       text-align:center;
 
       color:#FFB800;
@@ -102,9 +108,20 @@
 
       font-weight:700;
 
-      margin-bottom:28px;
+      margin-bottom:10px;
+    }
 
-      letter-spacing:1px;
+    .subtitle{
+
+      text-align:center;
+
+      color:#cbd5e1;
+
+      font-size:13px;
+
+      line-height:1.6;
+
+      margin-bottom:28px;
     }
 
     .input-group{
@@ -115,11 +132,11 @@
 
       width:100%;
 
-      padding:14px 16px;
+      padding:15px 16px;
 
       border:none;
 
-      border-radius:12px;
+      border-radius:14px;
 
       outline:none;
 
@@ -127,9 +144,11 @@
 
       background:#fff;
 
-      transition:.2s ease;
+      transition:.25s ease;
 
       border:2px solid transparent;
+
+      font-family:'Poppins',sans-serif;
     }
 
     .input-group input:focus{
@@ -149,7 +168,7 @@
     }
 
     .input-icon-wrap input{
-      padding-right:48px;
+      padding-right:52px;
     }
 
     .toggle-pw{
@@ -157,7 +176,7 @@
       position:absolute;
 
       top:50%;
-      right:14px;
+      right:15px;
 
       transform:translateY(-50%);
 
@@ -170,40 +189,23 @@
       font-size:18px;
 
       color:#888;
+
+      transition:.2s ease;
     }
 
-    .forgot-link{
-
-      display:block;
-
-      text-align:right;
-
-      margin-top:-6px;
-
-      margin-bottom:22px;
-
-      text-decoration:none;
-
-      color:#dbe4ff;
-
-      font-size:13px;
-
-      transition:.2s;
-    }
-
-    .forgot-link:hover{
+    .toggle-pw:hover{
       color:#FFB800;
     }
 
-    .btn-login{
+    .btn-reset{
 
       width:100%;
 
-      padding:14px;
+      padding:15px;
 
       border:none;
 
-      border-radius:14px;
+      border-radius:16px;
 
       background:#FFB800;
 
@@ -215,18 +217,20 @@
 
       cursor:pointer;
 
-      transition:.2s ease;
+      transition:.25s ease;
 
       box-shadow:
-      0 8px 20px rgba(255,184,0,0.35);
+      0 10px 24px rgba(255,184,0,0.35);
     }
 
-    .btn-login:hover{
+    .btn-reset:hover{
+
       background:#ffca40;
+
       transform:translateY(-1px);
     }
 
-    .btn-login:disabled{
+    .btn-reset:disabled{
       opacity:.7;
       cursor:not-allowed;
     }
@@ -241,35 +245,15 @@
 
       font-size:13px;
 
-      color:#ff8b8b;
+      font-weight:500;
     }
 
     .success{
       color:#4ade80;
     }
 
-    .login-link{
-
-      margin-top:22px;
-
-      text-align:center;
-
-      color:#dbe4ff;
-
-      font-size:13px;
-    }
-
-    .login-link a{
-
-      color:#FFB800;
-
-      text-decoration:none;
-
-      font-weight:600;
-    }
-
-    .login-link a:hover{
-      text-decoration:underline;
+    .error{
+      color:#ff8b8b;
     }
 
     .spinner{
@@ -298,12 +282,36 @@
 
     }
 
-    .btn-login.loading .spinner{
+    .btn-reset.loading .spinner{
       display:block;
     }
 
-    .btn-login.loading .btn-text{
+    .btn-reset.loading .btn-text{
       display:none;
+    }
+
+    .back-login{
+
+      margin-top:22px;
+
+      text-align:center;
+
+      font-size:13px;
+
+      color:#dbe4ff;
+    }
+
+    .back-login a{
+
+      color:#FFB800;
+
+      text-decoration:none;
+
+      font-weight:600;
+    }
+
+    .back-login a:hover{
+      text-decoration:underline;
     }
 
   </style>
@@ -314,20 +322,27 @@
 <div class="container">
 
   <div class="logo-wrapper">
+
     <img
       src="{{ asset('logo.png') }}"
       alt="Logo"
     >
+
   </div>
 
   <form
     class="card"
-    id="loginForm"
+    id="resetForm"
   >
 
     <h1 class="title">
-      LOGIN
+      Reset Password
     </h1>
+
+    <p class="subtitle">
+      Masukkan email dan password baru
+      untuk mengakses akun kembali.
+    </p>
 
     <div class="input-group">
 
@@ -348,9 +363,9 @@
         <input
           type="password"
           id="password"
-          placeholder="Masukkan Password"
+          placeholder="Password Baru"
           required
-          autocomplete="current-password"
+          autocomplete="new-password"
         >
 
         <button
@@ -365,21 +380,38 @@
 
     </div>
 
-    <a
-      href="{{ url('/forgot-password') }}"
-      class="forgot-link"
-    >
-      Lupa Password?
-    </a>
+    <div class="input-group">
+
+      <div class="input-icon-wrap">
+
+        <input
+          type="password"
+          id="password_confirmation"
+          placeholder="Konfirmasi Password"
+          required
+          autocomplete="new-password"
+        >
+
+        <button
+          type="button"
+          class="toggle-pw"
+          onclick="togglePw('password_confirmation')"
+        >
+          👁
+        </button>
+
+      </div>
+
+    </div>
 
     <button
       type="submit"
-      class="btn-login"
-      id="loginBtn"
+      class="btn-reset"
+      id="submitBtn"
     >
 
       <span class="btn-text">
-        Login
+        Reset Password
       </span>
 
       <div class="spinner"></div>
@@ -391,12 +423,12 @@
       id="msg"
     ></div>
 
-    <div class="login-link">
+    <div class="back-login">
 
-      Belum punya akun?
+      Sudah ingat password?
 
-      <a href="{{ url('/register') }}">
-        Register di sini
+      <a href="{{ url('/login') }}">
+        Login di sini
       </a>
 
     </div>
@@ -416,48 +448,71 @@
     input.type === "password"
     ? "text"
     : "password";
-
   }
 
   document
-  .getElementById("loginForm")
+  .getElementById("resetForm")
   .addEventListener(
     "submit",
     async function(e){
 
       e.preventDefault();
 
+      const email =
+      document
+      .getElementById("email")
+      .value
+      .trim();
+
+      const password =
+      document
+      .getElementById("password")
+      .value;
+
+      const confirm =
+      document
+      .getElementById("password_confirmation")
+      .value;
+
       const btn =
-      document.getElementById("loginBtn");
+      document.getElementById("submitBtn");
 
       const msg =
       document.getElementById("msg");
 
+      msg.className = "message";
       msg.textContent = "";
-      msg.classList.remove("success");
-
-      const data = {
-
-        email:
-        document
-        .getElementById("email")
-        .value
-        .trim(),
-
-        password:
-        document
-        .getElementById("password")
-        .value
-
-      };
 
       if(
-        !data.email ||
-        !data.password
+        !email ||
+        !password ||
+        !confirm
       ){
 
+        msg.classList.add("error");
+
         msg.textContent =
-        "Email dan password wajib diisi.";
+        "Semua field wajib diisi.";
+
+        return;
+      }
+
+      if(password !== confirm){
+
+        msg.classList.add("error");
+
+        msg.textContent =
+        "Konfirmasi password tidak cocok.";
+
+        return;
+      }
+
+      if(password.length < 8){
+
+        msg.classList.add("error");
+
+        msg.textContent =
+        "Password minimal 8 karakter.";
 
         return;
       }
@@ -469,7 +524,7 @@
 
         const res =
         await fetch(
-          "/api/login",
+          "/api/reset-password",
           {
 
             method:"POST",
@@ -479,7 +534,13 @@
               "Accept":"application/json"
             },
 
-            body:JSON.stringify(data)
+            body:JSON.stringify({
+
+              email,
+              password,
+              password_confirmation:confirm
+
+            })
 
           }
         );
@@ -491,58 +552,38 @@
 
         if(!res.ok){
 
+          msg.classList.add("error");
+
           msg.textContent =
           result.message ||
-          "Login gagal";
+          "Gagal reset password.";
 
           return;
         }
 
-        localStorage.setItem(
-          "token",
-          result.token
-        );
-
-        localStorage.setItem(
-          "user",
-          JSON.stringify(result.user)
-        );
-
         msg.classList.add("success");
 
         msg.textContent =
-        "Login berhasil...";
+        result.message ||
+        "Password berhasil direset!";
 
-        const role =
-        result.user.role;
+        document
+        .getElementById("resetForm")
+        .reset();
 
         setTimeout(() => {
 
-          if(role === "pedagang"){
+          window.location.href =
+          "/login";
 
-            window.location.href =
-            "/dashboard/seller";
-
-          }
-          else if(role === "konsumen"){
-
-            window.location.href =
-            "/dashboard/consument";
-
-          }
-          else{
-
-            window.location.href =
-            "/";
-
-          }
-
-        }, 800);
+        }, 1500);
 
       }
       catch(error){
 
         console.error(error);
+
+        msg.classList.add("error");
 
         msg.textContent =
         "Tidak dapat terhubung ke server.";

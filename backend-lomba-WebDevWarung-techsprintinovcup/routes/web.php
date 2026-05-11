@@ -25,3 +25,7 @@ Route::get('/menu/create', function () {
     return view('products.katalog_menu'); 
 });
 
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+});
+
