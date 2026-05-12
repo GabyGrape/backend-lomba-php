@@ -16,8 +16,13 @@ class User extends Authenticatable
     protected $table = 'users_';
 
     // Tambahkan di bagian atas model User
-protected $appends = ['qris_url'];
+protected $appends = ['qris_url', 'role'];
 
+public function getRoleAttribute()
+{
+    // Mengambil nama dari relasi role
+    return $this->role()->first()?->name;
+}
 // Tambahkan method ini di dalam class User
     /**
      * Atribut yang boleh diisi secara massal.
@@ -27,7 +32,7 @@ protected $appends = ['qris_url'];
         'email',
         'password',
         'role',
-        'role_id',      // Tambahkan role karena ada di migration kamu
+        'role_id',     // Tambahkan role karena ada di migration kamu
         'is_active',  // Tambahkan is_active
         'nama_warung',
         'alamat_warung',
@@ -68,4 +73,5 @@ public function hasRole($roleName)
             'is_active' => 'boolean',
         ];
     }
+    
 }

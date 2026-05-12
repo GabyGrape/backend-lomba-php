@@ -35,19 +35,31 @@ class AuthController extends Controller
     //         'token' => $token
     //     ], 201);
     // }
-    public function register(Request $request) {
+//     public function register(Request $request) {
+//     $fields = $request->validate([
+//         'name' => 'required|string',
+//         'email' => 'required|string|email|unique:users_,email',
+//         'password' => 'required|string|min:6',
+//         // 'role' => 'required|in:pedagang,konsumen,user,admin,developer',
+//         'role_name' => 'required|in:pedagang,konsumen', // Gunakan role_name untuk mencari ID
+//         // Tambahkan validasi opsional
+//         'nama_warung' => 'nullable|string',
+//         'alamat_warung' => 'nullable|string'
+//     ]);
+// // Cari ID role di tabel roles
+//     $role = \App\Models\Role::where('name', $fields['role_name'])->first();
+public function register(Request $request) {
     $fields = $request->validate([
         'name' => 'required|string',
         'email' => 'required|string|email|unique:users_,email',
         'password' => 'required|string|min:6',
-        // 'role' => 'required|in:pedagang,konsumen,user,admin,developer',
-        'role_name' => 'required|in:pedagang,konsumen', // Gunakan role_name untuk mencari ID
-        // Tambahkan validasi opsional
+        'role' => 'required|in:pedagang,konsumen', // FE kirim key "role"
         'nama_warung' => 'nullable|string',
         'alamat_warung' => 'nullable|string'
     ]);
-// Cari ID role di tabel roles
-    $role = \App\Models\Role::where('name', $fields['role_name'])->first();
+
+    // Cari ID role berdasarkan input 'role'
+    $role = \App\Models\Role::where('name', $fields['role'])->first();
     if (!$role) {
         return response([
             'message' => 'Role yang dipilih tidak valid'
@@ -67,44 +79,101 @@ class AuthController extends Controller
 
     $token = $user->createToken('warungtoken')->plainTextToken;
 
+    // return response([
+    //     'message' => 'Registrasi Berhasil',
+    //     'user' => $user->load('role'),
+    //     'token' => $token
+    // ], 201);
     return response([
-        'message' => 'Registrasi Berhasil',
-        'user' => $user->load('role'),
-        'token' => $token
-    ], 201);
+    'message' => 'Registrasi Berhasil',
+    'user' => $user, // Accessor 'role' akan otomatis muncul sebagai string
+    'token' => $token
+], 201);
 }
 
+    // public function login(Request $request) {
+    //     $fields = $request->validate([
+    //         'email' => 'required|string|email',
+    //         'password' => 'required|string'
+    //     ]);
+
+    //     // Cari user di tabel users_
+    //     $user = User::where('email', $fields['email'])->first();
+
+    //     // Cek apakah user ada DAN password cocok (String comparison)
+    //     if (!$user || $fields['password'] !== $user->password) {
+    //         return response([
+    //             'message' => 'Email atau Password yang kamu masukkan salah'
+    //         ], 401);
+    //     }
+
+    //     // Cek jika akun dinonaktifkan
+    //     if (!$user->is_active) {
+    //         return response([
+    //             'message' => 'Akun kamu sedang dinonaktifkan'
+    //         ], 403);
+    //     }
+
+    //     $token = $user->createToken('warungtoken')->plainTextToken;
+
+    //     return response([
+    //         'message' => 'Login Berhasil',
+    //         'user' => $user,
+    //         'token' => $token
+    //     ], 200);
+    // }
+    // public function login(Request $request) {
+    // $fields = $request->validate([
+    //     'email' => 'required|string|email',
+    //     'password' => 'required|string'
+    // ]);
+
+    // // Tambahkan load('role') agar konsisten dengan Register
+    // $user = User::with('role')->where('email', $fields['email'])->first();
+
+    // if (!$user || $fields['password'] !== $user->password) {
+    //     return response([
+    //         'message' => 'Email atau Password yang kamu masukkan salah'
+    //     ], 401);
+    // }
     public function login(Request $request) {
-        $fields = $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string'
-        ]);
+    $fields = $request->validate([
+        'email' => 'required|string|email',
+        'password' => 'required|string'
+    ]);
 
-        // Cari user di tabel users_
-        $user = User::where('email', $fields['email'])->first();
+    // HAPUS .with('role') di sini
+    $user = User::where('email', $fields['email'])->first();
 
-        // Cek apakah user ada DAN password cocok (String comparison)
-        if (!$user || $fields['password'] !== $user->password) {
-            return response([
-                'message' => 'Email atau Password yang kamu masukkan salah'
-            ], 401);
-        }
-
-        // Cek jika akun dinonaktifkan
-        if (!$user->is_active) {
-            return response([
-                'message' => 'Akun kamu sedang dinonaktifkan'
-            ], 403);
-        }
-
-        $token = $user->createToken('warungtoken')->plainTextToken;
-
+    if (!$user || $fields['password'] !== $user->password) {
         return response([
-            'message' => 'Login Berhasil',
-            'user' => $user,
-            'token' => $token
-        ], 200);
+            'message' => 'Email atau Password yang kamu masukkan salah'
+        ], 401);
     }
+
+    if (!$user->is_active) {
+        return response(['message' => 'Akun kamu sedang dinonaktifkan'], 403);
+    }
+
+    $token = $user->createToken('warungtoken')->plainTextToken;
+
+    // return response([
+    //     'message' => 'Login Berhasil',
+    //     'user' => $user, // Sekarang sudah ada objek role-nya
+    //     'token' => $token
+    // ], 200);
+//     return response([
+//     'message' => 'Login Berhasil',
+//     'user' => $user, // Otomatis menyertakan role: "pedagang"
+//     'token' => $token
+// ], 200);
+// }
+return response([
+        'message' => 'Login Berhasil',
+        'user' => $user, // Ini akan otomatis menggunakan Accessor String
+        'token' => $token
+    ], 200);
+}
     
     public function logout(Request $request) {
         // Menghapus token yang sedang digunakan saat ini
