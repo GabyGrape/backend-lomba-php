@@ -28,4 +28,10 @@ Route::get('/menu/create', function () {
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 });
-
+Route::get('/debug-data', function() {
+    return [
+        'users' => \App\Models\User::all(),
+        'total' => \App\Models\User::count(),
+        'database_path' => config('database.connections.sqlite.database'),
+    ];
+});
