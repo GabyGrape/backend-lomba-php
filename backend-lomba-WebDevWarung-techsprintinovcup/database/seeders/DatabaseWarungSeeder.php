@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-// 1. Memanggil Model agar bisa digunakan di bawah
 use App\Models\Role; 
 use App\Models\Category; 
 use App\Models\OrderStatus; 
@@ -12,46 +11,42 @@ class DatabaseWarungSeeder extends Seeder
 {
     public function run(): void
     {
-        // 2. Isi Roles
-        // Karena sudah ada 'use App\Models\Role' di atas, cukup tulis Role::
-        Role::create([
-            'name' => 'pedagang', 
-            'display_name' => 'Pemilik Warung'
-        ]);
+        // 1. Isi Roles (Pakai updateOrCreate agar tidak error UNIQUE)
+        Role::updateOrCreate(
+            ['name' => 'pedagang'], 
+            ['display_name' => 'Pemilik Warung']
+        );
 
-        Role::create([
-            'name' => 'konsumen', 
-            'display_name' => 'Pembeli/Pelanggan'
-        ]);
+        Role::updateOrCreate(
+            ['name' => 'konsumen'], 
+            ['display_name' => 'Pembeli/Pelanggan']
+        );
 
-        // 3. Isi Kategori
-        Category::create([
-            'name' => 'Makanan', 
-            'slug' => 'makanan'
-        ]);
+        // 2. Isi Kategori
+        Category::updateOrCreate(
+            ['slug' => 'makanan'], 
+            ['name' => 'Makanan']
+        );
 
-        Category::create([
-            'name' => 'Minuman', 
-            'slug' => 'minuman'
-        ]);
+        Category::updateOrCreate(
+            ['slug' => 'minuman'], 
+            ['name' => 'Minuman']
+        );
 
-        // 4. Isi Status Pesanan
-        OrderStatus::create([
-            'name' => 'pending', 
-            'label' => 'Menunggu Konfirmasi', 
-            'color' => '#FFA500'
-        ]);
+        // 3. Isi Status Pesanan
+        OrderStatus::updateOrCreate(
+            ['name' => 'pending'], 
+            ['label' => 'Menunggu Konfirmasi', 'color' => '#FFA500']
+        );
 
-        OrderStatus::create([
-            'name' => 'processing', 
-            'label' => 'Sedang Dimasak', 
-            'color' => '#0000FF'
-        ]);
+        OrderStatus::updateOrCreate(
+            ['name' => 'processing'], 
+            ['label' => 'Sedang Dimasak', 'color' => '#0000FF']
+        );
 
-        OrderStatus::create([
-            'name' => 'completed', 
-            'label' => 'Selesai', 
-            'color' => '#008000'
-        ]);
+        OrderStatus::updateOrCreate(
+            ['name' => 'completed'], 
+            ['label' => 'Selesai', 'color' => '#008000']
+        );
     }
 }
