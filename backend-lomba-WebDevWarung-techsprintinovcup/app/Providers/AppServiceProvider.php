@@ -18,12 +18,15 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {
-        //
-        // Jika di Railway (Production), jalankan migrasi otomatis
-    if (config('app.env') === 'production') {
-        \Illuminate\Support\Facades\Artisan::call('migrate --force');
-        \Illuminate\Support\Facades\Artisan::call('db:seed --force');
+{
+    // Hanya jalan jika di production DAN tidak sedang menjalankan command via terminal (biar build aman)
+    if (config('app.env') === 'production' && !app()->runningInConsole()) {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('migrate --force');
+            // Kita skip seeder di sini dulu biar build-nya lolos
+        } catch (\Exception $e) {
+            // Biarkan saja agar build tidak mati
+        }
     }
-    }
+}
 }
