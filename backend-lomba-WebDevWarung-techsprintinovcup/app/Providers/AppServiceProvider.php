@@ -20,5 +20,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+        // Jika di Railway (Production), jalankan migrasi otomatis
+    if (config('app.env') === 'production') {
+        \Illuminate\Support\Facades\Artisan::call('migrate --force');
+        \Illuminate\Support\Facades\Artisan::call('db:seed --force');
+    }
     }
 }
