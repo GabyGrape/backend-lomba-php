@@ -30,8 +30,8 @@ Route::get('/forgot-password', function () {
 });
 Route::get('/debug-data', function() {
     return [
-        'users' => \App\Models\User::all(),
-        'total' => \App\Models\User::count(),
-        'database_path' => config('database.connections.sqlite.database'),
+        'total_users' => \App\Models\User::count(),
+        'roles_in_db' => \App\Models\Role::all(), // Cek apakah role sudah masuk
+        'categories' => \App\Models\Category::all(),
     ];
 });
