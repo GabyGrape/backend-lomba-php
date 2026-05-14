@@ -77,3 +77,6 @@ Route::get('/orders/merchant/{id}', [OrderController::class, 'getByMerchantId'])
 Route::patch('/orders/{id}/status', [OrderController::class, 'updateStatus']);
 
 Route::apiResource('products', ProductController::class);
+Route::get('/healthz', function () {
+    return response('OK', 200);
+});
