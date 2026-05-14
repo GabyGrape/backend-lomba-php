@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ================= CSS AREA ================= */
         * {
             margin: 0;
             padding: 0;
@@ -119,20 +118,19 @@
             justify-content: center;
             align-items: center;
             transition: 0.3s;
-            /* Memberikan warna dasar untuk icon di dalam */
             color: #001a57; 
         }
 
         .btn-download svg {
-            width: 26px;  /* Sesuaikan ukuran icon */
+            width: 26px;
             height: 26px;
-            fill: none;   /* Supaya bagian tengah tidak terblok warna */
+            fill: none;
         }
 
         .btn-download:hover {
             background-color: #ffb800;
             transform: scale(1.1);
-            color: white; /* Icon otomatis jadi putih saat hover */
+            color: white;
         }
     </style>
 </head>
@@ -178,8 +176,7 @@
             if (totalSemua > 0) {
                 displayTotal.innerText = `Rp. ${totalSemua.toLocaleString('id-ID')}.00`;
             } else {
-                // Default jika keranjang kosong (misal untuk testing)
-                displayTotal.innerText = `Rp. 25.000.00`;
+                displayTotal.innerText = `Rp. 00.000.00`;
             }
         });
     </script>

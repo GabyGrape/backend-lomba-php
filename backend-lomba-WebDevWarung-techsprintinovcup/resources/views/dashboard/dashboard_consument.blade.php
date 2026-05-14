@@ -303,7 +303,7 @@ body{
     <div id="mySidebar" class="sidebar">
         <div class="sidebar-content">
             <a href="dashboard_consument.blade.php" onclick="closeNav()">Menu Makanan</a>
-            <a href="#">Status Pesanan</a>
+            <a href="status_pesanan.blade.php">Status Pesanan</a>
             <a href="#">Riwayat Pesanan</a>
         </div>
     </div>

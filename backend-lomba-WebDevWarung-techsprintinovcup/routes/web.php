@@ -36,6 +36,15 @@ Route::get('/detail-pesanan', function () {
 Route::get('/halaman-pembayaran', function () {
     return view('order.halaman_pembayaran');
 });
+
+Route::get('/status-pesanan', function () {
+    return view('order.status_pesanan');
+});
+
+Route::get('/pesanan-sukses', function () {
+    return view('order.pesanan_sukses');
+});
+
 Route::get('/debug-data', function() {
     return [
         'total_users' => \App\Models\User::count(),
