@@ -16,6 +16,13 @@
 # Pastikan folder database ada (penting untuk SQLite)
 mkdir -p /var/www/database/persistence
 
+
+# 2. Hapus Cache Konfigurasi & Route (Sangat Penting!)
+# Ini agar Laravel membaca ulang Model User yang sudah pakai users_
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+
 # Jalankan migrasi secara otomatis
 php artisan migrate --force
 
