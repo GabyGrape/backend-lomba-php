@@ -23,8 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-    Route::apiResource('purchases', PurchaseController::class);
-Route::apiResource('expenses', MonthlyExpenseController::class);
+    
 });
 //dashboard
 
@@ -80,3 +79,17 @@ Route::apiResource('products', ProductController::class);
 Route::get('/healthz', function () {
     return response('OK', 200);
 });
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/emergency-migrate', function () {
+    try {
+        Artisan::call('migrate --force');
+        Artisan::call('config:clear');
+        return response()->json(['message' => 'Migration Success', 'output' => Artisan::output()]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+});
+
+Route::apiResource('purchases', PurchaseController::class);
+Route::apiResource('expenses', MonthlyExpenseController::class);
