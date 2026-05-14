@@ -9,4 +9,5 @@ fi
 php artisan migrate --force
 
 # Jalankan server
-php artisan serve --host=0.0.0.0 --port=$PORT
+# php artisan serve --host=0.0.0.0 --port=$PORT
+php artisan serve --host=0.0.0.0 --port=${PORT:-10000}

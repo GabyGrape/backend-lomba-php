@@ -24,5 +24,8 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 # (Pastikan kamu punya file nginx.conf sederhana atau gunakan command untuk menjalankan php artisan serve)
 
+# Pastikan entrypoint bisa dijalankan
+RUN chmod +x entrypoint.sh
+
 # CMD php artisan serve --host=0.0.0.0 --port=$PORT
 CMD ["sh", "entrypoint.sh"]
