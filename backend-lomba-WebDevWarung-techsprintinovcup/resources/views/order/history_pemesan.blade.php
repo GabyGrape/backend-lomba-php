@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Pesanan</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        /* Navbar */
+        .navbar{
+            width:100%;
+            height:70px;
+            background:#002b7f;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:0 25px;
+            color:white;
+        }
+
+        .left-nav{
+            display:flex;
+            align-items:center;
+            gap:15px;
+        }
+
+        .menu-icon{
+            font-size:24px;
+            cursor:pointer;
+        }
+
+        .logo{
+            font-size:28px;
+            color:orange;
+            font-weight:bold;
+        }
+
+        .right-nav{
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+
+        .profile{
+            width:40px;
+            height:40px;
+            background:white;
+            border-radius:50%;
+        }
+
+        .navbar {
+            background-color: #001a57;
+            color: white;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-icon {
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .menu-trigger {
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+        }
+
+                /* Sidebar & Overlay */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1001;
+            top: 0;
+            left: 0;
+            background-color: #001a57;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar-content {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 15px;
+        }
+
+        .sidebar-content a {
+            padding: 12px 20px;
+            text-decoration: none;
+            font-size: 16px;
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar-content a:hover {
+            background-color: #ffb800;
+            color: #001a57;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        /* History Content */
+        .main-container {
+            padding: 30px 10%;
+        }
+
+        .history-group {
+            margin-bottom: 30px;
+        }
+
+        .date-header {
+            background-color: #e0e0e0;
+            padding: 10px 20px; 
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            
+            display: block;    
+            text-align: left;  
+        }    
+
+        .history-card {
+            background-color: #7286D3;
+            border-radius: 25px;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 15px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+
+        .history-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .history-img-box img {
+            width: 90px;
+            height: 90px;
+            border-radius: 15px;
+            object-fit: cover;
+            background-color: white;
+            border: 2px solid white;
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-info h3 {
+            color: #ffb800;
+            font-size: 22px;
+            margin-bottom: 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .history-info p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .history-price {
+            font-size: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="overlay" class="overlay" onclick="closeNav()"></div>
+
+    <div id="mySidebar" class="sidebar">
+        <div class="sidebar-content">
+            <a href="dashboard_consument.blade.php">Menu Makanan</a>
+            <a href="status_pesanan.blade.php">Status Pesanan</a>
+            <a href="history_pemesan.blade.php" style="background-color: #ffb800; color: #001a57;">Riwayat Pesanan</a>
+        </div>
+    </div>
+
+<div class="navbar">
+
+    <div class="left-nav">
+        <div class="menu-icon" onclick="openNav()">☰</div>
+        <div class="logo">🔥</div>
+    </div>
+
+    <div class="right-nav">
+        <div>Hallo, Nama Pengguna</div>
+        <div class="profile"></div>
+    </div>
+
+</div>
+
+    <div class="main-container">
+
+        <div class="history-group">
+            <div class="date-header">tanggal</div>
+
+            <div class="history-card">
+                <!-- <div class="history-img-box">
+                    <img src="{{ asset('1x/ayam bakar.jpg') }}" alt="Ayam Bakar">
+                </div>
+                <div class="history-info">
+                    <h3>Ayam Bakar</h3>
+                    <p>Ayam bakar dengan sambal menggoda janda pirang</p>
+                </div>
+                <div class="history-price">Rp. 20.000,00</div> -->
+            </div>
+
+            <div class="history-card">
+                <!-- <div class="history-img-box">
+                    <img src="{{ asset('1x/ayam goreng.jpg') }}" alt="Ayam Goreng">
+                </div>
+                <div class="history-info">
+                    <h3>Ayam Goreng</h3>
+                    <p>Ayam Goreng dengan sambal menggoda janda pirang</p>
+                </div>
+                <div class="history-price">Rp. 20.000,00</div> -->
+            </div>
+        </div>
+
+        <div class="history-group">
+            <div class="date-header">Tanggal</div>
+
+            <div class="history-card">
+                <!-- <div class="history-img-box">
+                    <img src="{{ asset('1x/es jeruk.jpg') }}" alt="Es Jeruk">
+                </div>
+                <div class="history-info">
+                    <h3>Es Jeruk</h3>
+                    <p>Jeruk perasan bangladesh asli segar</p>
+                </div>
+                <div class="history-price">Rp. 5.000,00</div> -->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "280px";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+
+</body>
+
+</html>

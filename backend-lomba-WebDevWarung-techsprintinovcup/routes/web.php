@@ -37,6 +37,10 @@ Route::get('/halaman-pembayaran', function () {
     return view('order.halaman_pembayaran');
 });
 
+Route::get('/history-pemesan', function () {
+    return view('order.history_pemesan');
+});
+
 Route::get('/status-pesanan', function () {
     return view('order.status_pesanan');
 });
