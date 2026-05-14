@@ -28,6 +28,14 @@ Route::get('/menu/create', function () {
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 });
+
+Route::get('/detail-pesanan', function () {
+    return view('order.detail_pesanan');
+});
+
+Route::get('/halaman-pembayaran', function () {
+    return view('order.halaman_pembayaran');
+});
 Route::get('/debug-data', function() {
     return [
         'total_users' => \App\Models\User::count(),

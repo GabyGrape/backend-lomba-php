@@ -65,6 +65,96 @@ body{
     border-radius:50%;
 }
 
+.navbar {
+    background-color: #001a57;
+    color: white;
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-icon {
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.menu-trigger {
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+}
+
+
+/* Sidebar, Overlay */
+
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1001;
+    top: 0;
+    left: 0;
+    background-color: #001a57;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 15px;
+}
+
+.sidebar-content a {
+    padding: 12px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar-content a:hover {
+    background-color: #ffb800;
+    color: #001a57;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
 /* ================= CONTAINER ================= */
 
 .container{
@@ -97,6 +187,41 @@ body{
     background:#bbb;
     border-radius:10px;
 }
+
+.main-container {
+    padding: 20px 5%;
+}
+
+.horizontal-scroll {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 25px;
+    overflow-x: auto;
+    padding: 10px 0 30px 0;
+    scrollbar-width: none;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* Produk Card */
+
+.product-card {
+    flex: 0 0 400px;
+    background-color: #7286D3;
+    border-radius: 30px;
+    padding: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    gap: 15px;
+}
+
 
 /* ================= CARD ================= */
 
@@ -169,13 +294,25 @@ body{
 
 </style>
 </head>
-<body>
+
+
+
+<body class="dashboard-body">
+    <div id="overlay" class="overlay" onclick="closeNav()"></div>
+
+    <div id="mySidebar" class="sidebar">
+        <div class="sidebar-content">
+            <a href="dashboard_consument.blade.php" onclick="closeNav()">Menu Makanan</a>
+            <a href="#">Status Pesanan</a>
+            <a href="#">Riwayat Pesanan</a>
+        </div>
+    </div>
 
 <!-- NAVBAR -->
 <div class="navbar">
 
     <div class="left-nav">
-        <div class="menu-icon">☰</div>
+        <div class="menu-icon" onclick="openNav()">☰</div>
         <div class="logo">🔥</div>
     </div>
 
@@ -186,16 +323,64 @@ body{
 
 </div>
 
+    <div class="main-container">
+        <h2>Makanan</h2>
+        <div class="horizontal-scroll">
+            <div class="product-card">
+                <div class="card-info"> </div>
+                <div class="card-action"> </div>
+            </div>
+
+            <div class="product-card">
+                <div class="card-info"> </div>
+                <div class="card-action"> </div>
+            </div>
+
+            <div class="product-card">
+                <div class="card-info"> </div>
+                <div class="card-action"> </div>
+            </div>
+
+            <div class="product-card">
+                <div class="card-info"> </div>
+                <div class="card-action"> </div>
+            </div>
+        </div>
+
+        <h2>Minuman</h2>
+        <div class="horizontal-scroll">
+            <div class="product-card">
+                <div class="card-info"> </div>
+                <div class="card-action"> </div>
+            </div>
+
+            <div class="product-card">
+                <div class="card-info"> </div>
+                <div class="card-action"> </div>
+            </div>
+
+            <div class="product-card">
+                <div class="card-info"> </div>
+                <div class="card-action"> </div>
+            </div>
+
+            <div class="product-card">
+                <div class="card-info"> </div>
+                <div class="card-action"> </div>
+            </div>
+        </div>
+    </div>
+
 <div class="container">
 
     <div class="alert" id="alertBox">
         Produk berhasil ditambahkan ke cart
     </div>
 
-    <!-- MAKANAN -->
+    <!-- MAKANAN
     <div class="category-title">
         Makanan & Minuman
-    </div>
+    </div> -->
 
     <div class="menu-grid" id="menuGrid">
 
@@ -321,6 +506,20 @@ async function addToCart(productId){
 
 // AUTO LOAD
 getProducts();
+
+/*NAVBAR*/
+function openNav() 
+{
+    document.getElementById("mySidebar").style.width = "250px";
+    document.getElementById("overlay").style.display = "block";
+}
+
+ function closeNav()
+{
+    document.getElementById("mySidebar").style.width = "0";
+    document.getElementById("overlay").style.display = "none";
+}
+
 
 </script>
 
