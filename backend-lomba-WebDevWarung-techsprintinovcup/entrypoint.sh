@@ -15,20 +15,26 @@
 
 # Pastikan folder database ada (penting untuk SQLite)
 mkdir -p /var/www/database/persistence
-
+touch /var/www/database/persistence/database.sqlite
 
 # 2. Hapus Cache Konfigurasi & Route (Sangat Penting!)
 # Ini agar Laravel membaca ulang Model User yang sudah pakai users_
 php artisan config:clear
 php artisan cache:clear
+php artisan view:clear
 php artisan route:clear
 
-# Jalankan migrasi secara otomatis
-php artisan migrate --force
+# # Jalankan migrasi secara otomatis
+# php artisan migrate --force
 
-# 2. Jalankan Seeder
-# Gunakan --force karena ini lingkungan production
-php artisan db:seed --force
+# # 2. Jalankan Seeder
+# # Gunakan --force karena ini lingkungan production
+# php artisan db:seed --force
+
+
+# Jalankan migrasi ulang secara total (Fresh)
+# Ini akan menghapus semua tabel dan membuat ulang sesuai kode terbaru (users_)
+php artisan migrate:fresh --force --seed
 
 
 # Jalankan server menggunakan port yang diberikan Render (default 10000)
