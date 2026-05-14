@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\OrderController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Api\PurchaseController;
+use App\Http\Controllers\Api\MonthlyExpenseController;
 
 
 Route::get('/products', [ProductController::class, 'index']);
@@ -21,6 +23,8 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    Route::apiResource('purchases', PurchaseController::class);
+Route::apiResource('expenses', MonthlyExpenseController::class);
 });
 //dashboard
 
