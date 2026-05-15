@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran QRIS</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body class="payment-body">
+    <a href="detail_pesanan.html" class="btn-back">
+        <img src="1x/Asset 8.png" alt="Kembali" style="width: 100%;">
+    </a>
+
+    <div class="qris-card">
+        <h2>Rp. 25.000.00</h2>
+
+        <div class="qr-container">
+            <img src="1x/qr.jpg" alt="QRIS Code">
+        </div>
+
+        <p>Pembayaran Hanya Menggunakan Qris</p>
+
+        <a href="suskes.html" class="btn-download">
+            <img src="1x/Asset 12.png" alt="Download">
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const keranjang = JSON.parse(localStorage.getItem('keranjang')) || [];
+            let totalSemua = 0;
+
+            keranjang.forEach(item => {
+                totalSemua += item.harga;
+            });
+
+            if (totalSemua > 0) {
+                document.getElementById('total-tagihan').innerText = `Rp. ${totalSemua.toLocaleString()}.00`;
+            }
+        });
+    </script>
+</body>
+
+</html>

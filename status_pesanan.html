@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Pesanan - Kantin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="overlay" class="overlay" onclick="closeNav()"></div>
+
+    <div id="mySidebar" class="sidebar">
+        <div class="sidebar-content">
+            <a href="hlm_pembeli.html">Menu Makanan</a>
+            <a href="#" style="background-color: #ffb800; color: #001a57;">Status Pesanan</a>
+            <a href="riwayat_pesanan.html">Riwayat Pesanan</a>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <img src="1x/Asset 13.png" alt="Menu" class="img-burger" onclick="openNav()">
+            <img src="logo.png" alt="" class="nav-logo" onerror="this.style.display='none'">
+        </div>
+        <div class="user-info">
+            <span>Hallo, <strong>Bimo Refka</strong></span>
+            <div class="profile-icon">
+                <img src="1x/Asset 11.png" alt="profile-icon">
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container status-page">
+        <div class="status-card">
+            <h1>Status Pesanan</h1>
+
+            <div class="timeline-container">
+                <div class="status-connector-line"></div>
+
+                <div class="status-point">
+                    <div class="status-circle color-green"></div>
+                    <span>Diterima</span>
+                </div>
+
+                <div class="status-point">
+                    <div class="status-circle color-yellow"></div>
+                    <span>Disiapkan</span>
+                </div>
+
+                <div class="status-point">
+                    <div class="status-circle color-red"></div>
+                    <span>Pesanan Siap<br>Diambil</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "280px";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>
