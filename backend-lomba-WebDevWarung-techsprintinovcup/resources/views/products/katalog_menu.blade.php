@@ -412,7 +412,8 @@ html, body{
 
 <script>
 const API_URL = "http://localhost:8000/api/products";
-
+const user = JSON.parse(localStorage.getItem("user"));
+document.querySelector(".nav-user-text").textContent = `Hallo, ${user.name}`;
 let selectedCategoryId = 1;
 let selectedFile = null;
 
@@ -453,9 +454,10 @@ async function submitForm() {
     formData.append('deskripsi',   deskripsi);
     formData.append('harga',       Number(harga));
     formData.append('stok',        Number(stok));
-    formData.append('kategori', selectedCategoryId === 1 ? 'Makanan' : 'Minuman');
-    formData.append('user_id',     1);
-    formData.append('status',      'tersedia');
+    formData.append('category_id', selectedCategoryId);
+    const user = JSON.parse(localStorage.getItem("user"));
+        formData.append('user_id', user.id); 
+            formData.append('status',      'tersedia');
     if (selectedFile) formData.append('gambar', selectedFile);
 
     const btn = document.querySelector('.btn-input');
@@ -463,9 +465,13 @@ async function submitForm() {
     btn.disabled = true;
 
     try {
+       const token = localStorage.getItem("token");
         const res = await fetch(API_URL, {
             method: 'POST',
-            headers: { 'Accept': 'application/json' },
+            headers: { 
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`  // ← tambah ini
+            },
             body: formData
         });
 
