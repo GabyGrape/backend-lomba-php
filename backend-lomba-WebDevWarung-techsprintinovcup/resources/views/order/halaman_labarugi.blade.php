@@ -287,6 +287,7 @@
                 <div class="calc-card">Total Pembelian</div>
                 <div class="calc-sub">Rp. {{ number_format($totalBeli, 0, ',', '.') }}</div>
             </div>
+            
             <div>
                 <div class="calc-card">Total Penjualan</div>
                 <div class="calc-sub">Rp. {{ number_format($totalJual, 0, ',', '.') }}</div>

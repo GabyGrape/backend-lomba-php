@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Pesanan</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar{
+            background:#002b7f;
+            height:90px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:0 20px;
+        }
+
+        /* MENU */
+        .nav-menu{
+            display:flex;
+            gap:25px;
+            align-items:center;
+        }
+
+        .menu-item{
+            text-align:center;
+            color:white;
+            font-size:10px;
+            cursor:pointer;
+        }
+
+        .circle-icon{
+            width:55px;
+            height:55px;
+            border-radius:50%;
+            background:white;
+            color:black;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:28px;
+            margin:auto;
+            margin-bottom:5px;
+            font-weight:bold;
+        }
+
+        /* PROFILE */
+        .profile-section{
+            display:flex;
+            align-items:center;
+            gap:15px;
+            color:white;
+        }
+
+        .profile{
+            width:50px;
+            height:50px;
+            border-radius:50%;
+            background:white;
+        }
+
+     /* Sidebar & Overlay */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1001;
+            top: 0;
+            left: 0;
+            background-color: #001a57;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar-content {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 15px;
+        }
+
+        .sidebar-content a {
+            padding: 12px 20px;
+            text-decoration: none;
+            font-size: 16px;
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar-content a:hover {
+            background-color: #ffb800;
+            color: #001a57;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        /* History Content */
+        .main-container {
+            padding: 30px 10%;
+        }
+
+        .history-group {
+            margin-bottom: 30px;
+        }
+
+        .date-header {
+            background-color: #e0e0e0;
+            padding: 10px 20px; 
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            
+            display: block;    
+            text-align: left;  
+        }    
+
+        .history-card {
+            background-color: #7286D3;
+            border-radius: 25px;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 15px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+
+        .history-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .history-img-box img {
+            width: 90px;
+            height: 90px;
+            border-radius: 15px;
+            object-fit: cover;
+            background-color: white;
+            border: 2px solid white;
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-info h3 {
+            color: #ffb800;
+            font-size: 22px;
+            margin-bottom: 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .history-info p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .history-price {
+            font-size: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+            color: #ffffff;
+        }
+
+        /*button filter harian*/
+        .more-options {
+            position: relative;
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 40px;
+            margin-bottom: 10px;
+        }
+
+        .dots-btn {
+            cursor: pointer;
+            display: flex;
+            gap: 4px;
+            padding: 10px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #001a57;
+            border-radius: 50%;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-period {
+            display: none; 
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            background-color: #001a57;
+            padding: 10px;
+            border-radius: 15px;
+            z-index: 100;
+            gap: 10px;
+        }
+
+        .dropdown-period.show {
+            display: flex;
+        }
+
+        .btn-period {
+            background-color: #ffb800;
+            color: #001a57;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .btn-period:hover {
+            background-color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="overlay" class="overlay" onclick="closeNav()"></div>
+
+    <div id="mySidebar" class="sidebar">
+        <div class="sidebar-content">
+            <a href="dashboard_consument.blade.php">Menu Makanan</a>
+            <a href="status_pesanan.blade.php">Status Pesanan</a>
+            <a href="history_pemesan.blade.php" style="background-color: #ffb800; color: #001a57;">Riwayat Pesanan</a>
+        </div>
+    </div>
+
+    <div class="navbar">
+
+        <div class="nav-menu">
+
+            <div class="menu-item">
+                <div class="circle-icon">⌂</div>
+                Dashboard
+            </div>
+
+            <div class="menu-item" onclick="goToCreate()">
+                <div class="circle-icon">+</div>
+                Tambah Menu
+            </div>
+
+            <div class="menu-item">
+                <div class="circle-icon">💰</div>
+                Laporan
+            </div>
+
+            <div class="menu-item">
+                <div class="circle-icon">⟳</div>
+                Pesanan
+            </div>
+
+        </div>
+
+        <div class="profile-section">
+            <div>Hallo, Nama Pengguna</div>
+            <div class="profile"></div>
+        </div>
+
+    </div>
+
+        <div class="more-options">
+        <div class="dots-btn" onclick="toggleDropdown()">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+
+        <div id="dropdownPeriod" class="dropdown-period">
+            <button class="btn-period" onclick="filterData('harian')">Harian</button>
+            <button class="btn-period" onclick="filterData('mingguan')">Mingguan</button>
+            <button class="btn-period" onclick="filterData('bulanan')">Bulanan</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+
+        <div class="history-group">
+            <div class="date-header">tanggal</div>
+
+            <div class="history-card">
+                <!-- <div class="history-img-box">
+                    <img src="{{ asset('1x/ayam bakar.jpg') }}" alt="Ayam Bakar">
+                </div>
+                <div class="history-info">
+                    <h3>Ayam Bakar</h3>
+                    <p>Ayam bakar dengan sambal menggoda janda pirang</p>
+                </div>
+                <div class="history-price">Rp. 20.000,00</div> -->
+            </div>
+
+            <div class="history-card">
+                <!-- <div class="history-img-box">
+                    <img src="{{ asset('1x/ayam goreng.jpg') }}" alt="Ayam Goreng">
+                </div>
+                <div class="history-info">
+                    <h3>Ayam Goreng</h3>
+                    <p>Ayam Goreng dengan sambal menggoda janda pirang</p>
+                </div>
+                <div class="history-price">Rp. 20.000,00</div> -->
+            </div>
+        </div>
+
+        <div class="history-group">
+            <div class="date-header">Tanggal</div>
+
+            <div class="history-card">
+                <!-- <div class="history-img-box">
+                    <img src="{{ asset('1x/es jeruk.jpg') }}" alt="Es Jeruk">
+                </div>
+                <div class="history-info">
+                    <h3>Es Jeruk</h3>
+                    <p>Jeruk perasan bangladesh asli segar</p>
+                </div>
+                <div class="history-price">Rp. 5.000,00</div> -->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "280px";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("overlay").style.display = "none";
+        }
+
+        function toggleDropdown() {
+    const dropdown = document.getElementById("dropdownPeriod");
+    dropdown.classList.toggle("show");
+    }
+
+    // Menutup dropdown
+    window.onclick = function(event) {
+        if (!event.target.matches('.dots-btn') && !event.target.matches('.dot')) {
+            const dropdowns = document.getElementsByClassName("dropdown-period");
+            for (let i = 0; i < dropdowns.length; i++) {
+                let openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+
+    function filterData(periode) {
+        alert("Menampilkan data " + periode);
+        toggleDropdown();
+    }
+    </script>
+
+</body>
+
+</html>

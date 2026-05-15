@@ -53,6 +53,10 @@ Route::get('/halaman-labarugi', function () {
     return view('order.halaman_labarugi');
 });
 
+Route::get('/history-penjual', function () {
+    return view('order.history_penjual');
+});
+
 Route::get('/debug-data', function() {
     return [
         'total_users' => \App\Models\User::count(),
