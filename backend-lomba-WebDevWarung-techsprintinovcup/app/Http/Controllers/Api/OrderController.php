@@ -158,4 +158,129 @@ public function updateStatus(Request $request, $id) {
     $order->update(['status' => $request->status]); // misal kirim status: 'completed'
     return response()->json(['message' => 'Status updated', 'data' => $order]);
 }
+// public function completeOrder($orderId)
+// {
+//     return DB::transaction(function () use ($orderId) {
+//         $order = Order::with('items')->findOrFail($orderId);
+        
+//         if ($order->status === 'completed') return; // Avoid double count
+
+//         $totalCogs = 0;
+
+//         foreach ($order->items as $item) {
+//             // Ambil harga modal rata-rata dari inventory_stocks
+//             $stock = InventoryStock::where('merchant_id', $order->merchant_id)
+//                 ->where('product_name', $item->product_name) // Pastikan relasi ke produk benar
+//                 ->first();
+
+//             if ($stock) {
+//                 $cogsForItem = $item->quantity * $stock->average_unit_price;
+//                 $totalCogs += $cogsForItem;
+
+//                 // Kurangi stok fisik
+//                 $stock->decrement('total_quantity', $item->quantity);
+//                 $stock->total_inventory_value = $stock->total_quantity * $stock->average_unit_price;
+//                 $stock->save();
+//             }
+//         }
+
+//         $order->status = 'completed';
+//         $order->save();
+
+//         // Update Laporan Harian
+//         $report = DailyFinancialReport::firstOrCreate([
+//             'merchant_id' => $order->merchant_id,
+//             'report_date' => now()->toDateString()
+//         ]);
+
+//         $report->total_sales += $order->total_price;
+//         $report->total_cogs += $totalCogs;
+//         $report->gross_profit = $report->total_sales - $report->total_cogs;
+//         $report->net_profit = $report->gross_profit - $report->monthly_expenses;
+//         $report->save();
+
+//         return response()->json(['message' => 'Laporan Terupdate']);
+//     });
+// }
+public function completeOrder($orderId)
+{
+    return DB::transaction(function () use ($orderId) {
+        // 1. Cek apakah Order ada (Tanpa memicu 404 otomatis)
+        $order = Order::with('items.product')->find($orderId);
+
+        if (!$order) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Order dengan ID $orderId tidak ditemukan di database."
+            ], 404);
+        }
+
+        // 2. Proteksi: jangan proses jika sudah completed
+        // Gunakan status_id atau status sesuai kolom di tabelmu
+        if ($order->status == 'completed' || $order->status_id == 3) { 
+            return response()->json(['message' => 'Order sudah diproses sebelumnya'], 400);
+        }
+
+        $totalCogsForOrder = 0;
+
+        foreach ($order->items as $item) {
+            // Pastikan relasi 'product' ada di model OrderItem
+            if (!$item->product) {
+                continue; // Skip jika item tidak punya relasi produk
+            }
+
+            // 3. Cari Stok
+            $stock = \App\Models\InventoryStock::where('merchant_id', $order->merchant_id)
+                ->where('product_name', $item->product->name) 
+                ->first();
+
+            if ($stock) {
+                // Hitung COGS
+                $totalCogsForOrder += ($item->quantity * $stock->average_unit_price);
+
+                // Kurangi Stok
+                $stock->decrement('total_quantity', $item->quantity);
+                $stock->total_inventory_value = $stock->total_quantity * $stock->average_unit_price;
+                $stock->save();
+            }
+        }
+
+        // 4. Update Status Order (Sesuaikan kolomnya: status atau status_id)
+        $order->update(['status' => 'completed']);
+
+        // 5. Update Laporan Keuangan Harian
+        $report = \App\Models\DailyFinancialReport::firstOrCreate([
+            'merchant_id' => $order->merchant_id,
+            'report_date' => $order->created_at->toDateString()
+        ]);
+
+        $report->increment('total_sales', $order->total_price);
+        $report->increment('total_cogs', $totalCogsForOrder);
+        
+        $report->gross_profit = $report->total_sales - $report->total_cogs;
+        $report->net_profit = $report->gross_profit - $report->monthly_expenses;
+        $report->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Laporan Laba Rugi Terupdate',
+            'data' => [
+                'order_id' => $order->id,
+                'total_sales' => $order->total_price,
+                'total_cogs' => $totalCogsForOrder,
+                'profit' => $order->total_price - $totalCogsForOrder
+            ]
+        ]);
+    });
+}
+
+// public function completeOrder($orderId)
+// {
+//     // Hapus semua logic, sisakan ini saja untuk tes
+//     return response()->json([
+//         'message' => 'Rute berhasil diakses!',
+//         'id_yang_dikirim' => $orderId
+//     ]);
+// }
+
 }
