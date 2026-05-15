@@ -49,6 +49,10 @@ Route::get('/pesanan-sukses', function () {
     return view('order.pesanan_sukses');
 });
 
+Route::get('/halaman-labarugi', function () {
+    return view('order.halaman_labarugi');
+});
+
 Route::get('/debug-data', function() {
     return [
         'total_users' => \App\Models\User::count(),

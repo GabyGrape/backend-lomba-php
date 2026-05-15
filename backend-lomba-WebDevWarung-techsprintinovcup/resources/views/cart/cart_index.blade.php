@@ -96,10 +96,8 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-
-                    // kalau pakai token
-                    // 'Authorization': 'Bearer TOKEN'
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
                 },
                 body: JSON.stringify(payload)
             });

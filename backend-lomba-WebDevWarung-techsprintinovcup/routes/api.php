@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\OrderController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\PurchaseController;
 use App\Http\Controllers\Api\MonthlyExpenseController;
-
+use App\Http\Controllers\Api\FinancialReportController;
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::post('/products', [ProductController::class, 'store']);
@@ -23,8 +23,21 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-    Route::apiResource('purchases', PurchaseController::class);
-Route::apiResource('expenses', MonthlyExpenseController::class);
+    // // 1. Lihat keranjang sendiri
+    // Route::get('cart/my', [CartController::class, 'getMyCart']);
+    
+    // // 2. Tambah ke keranjang
+    // Route::post('cart/add', [CartController::class, 'addToCart']);
+    
+    // // 3. Lihat berdasarkan Merchant (Untuk Pedagang)
+    // Route::get('cart/merchant/{pedagang_id}', [CartController::class, 'getByPedagangId']);
+    Route::post('cart/add', [CartController::class, 'addToCart']);
+    Route::get('cart/my', [CartController::class, 'getMyCart']);
+    Route::get('cart/merchant/{pedagang_id}', [CartController::class, 'getByPedagangId']);
+
+    // 4. Lihat semua (Admin)
+    Route::get('cart/all', [CartController::class, 'index']);
+    
 });
 //dashboard
 
@@ -77,3 +90,27 @@ Route::get('/orders/merchant/{id}', [OrderController::class, 'getByMerchantId'])
 Route::patch('/orders/{id}/status', [OrderController::class, 'updateStatus']);
 
 Route::apiResource('products', ProductController::class);
+Route::get('/healthz', function () {
+    return response('OK', 200);
+});
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/emergency-migrate', function () {
+    try {
+        Artisan::call('migrate --force');
+        Artisan::call('config:clear');
+        return response()->json(['message' => 'Migration Success', 'output' => Artisan::output()]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+});
+// Route untuk menyelesaikan pesanan
+Route::post('/orders/{id}/complete', [OrderController::class, 'completeOrder']);
+
+
+Route::apiResource('purchases', PurchaseController::class);
+Route::apiResource('expenses', MonthlyExpenseController::class);
+
+
+// Route untuk melihat ringkasan laporan keuangan
+Route::get('/reports/finance-summary', [FinancialReportController::class, 'index']);

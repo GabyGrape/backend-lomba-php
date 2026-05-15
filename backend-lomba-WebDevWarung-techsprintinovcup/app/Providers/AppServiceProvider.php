@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema; // Tambahkan ini
+use Illuminate\Support\Facades\DB;     // Tambahkan ini
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
             // Kita skip seeder di sini dulu biar build-nya lolos
         } catch (\Exception $e) {
             // Biarkan saja agar build tidak mati
+        }
+        
+        // Tambahkan baris ini untuk mematikan pengecekan foreign key di SQLite
+        if (config('database.default') === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = OFF');
         }
     }
 }

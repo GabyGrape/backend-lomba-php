@@ -513,31 +513,21 @@
         msg.textContent =
         "Login berhasil...";
 
-        const role =
-        result.user.role;
+        // JADI INI (sementara berdasarkan email)
+const role = result.user.role;
+const email = result.user.email;
 
-        setTimeout(() => {
-
-          if(role === "pedagang"){
-
-            window.location.href =
-            "/dashboard/seller";
-
-          }
-          else if(role === "konsumen"){
-
-            window.location.href =
-            "/dashboard/consument";
-
-          }
-          else{
-
-            window.location.href =
-            "/";
-
-          }
-
-        }, 800);
+setTimeout(() => {
+    if(role === "pedagang" || email.includes("pedagang")){
+        window.location.href = "/dashboard/seller";
+    }
+    else if(role === "konsumen" || email.includes("konsumen")){
+        window.location.href = "/dashboard/consument";
+    }
+    else{
+        window.location.href = "/dashboard/seller"; // default sementara
+    }
+}, 800);
 
       }
       catch(error){
