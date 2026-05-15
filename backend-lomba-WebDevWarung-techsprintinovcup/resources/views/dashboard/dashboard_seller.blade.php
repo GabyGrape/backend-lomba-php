@@ -360,7 +360,8 @@ html, body{
 </div>
 
 <script>
-
+const user = JSON.parse(localStorage.getItem("user"));
+document.querySelector(".right-nav div").textContent = `Hallo, ${user.name}`;
 const API_URL = "http://127.0.0.1:8000/api/products";
 
 const headers = {
