@@ -47,10 +47,10 @@ public function getRoleAttribute()
         'remember_token',
     ];
 
-    public function role()
-{
-    return $this->belongsTo(Role::class, 'role_id');
-}
+public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
 
 // Helper untuk cek role (sangat berguna untuk proteksi API)
 public function hasRole($roleName)

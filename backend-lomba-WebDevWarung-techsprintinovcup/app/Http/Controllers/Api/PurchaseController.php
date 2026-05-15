@@ -10,12 +10,18 @@ class PurchaseController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Purchase::query()->with('user');
+        // $query = Purchase::query()->with('user');
 
-        // Filter by user_id yang rolenya pedagang
-        $query->whereHas('user', function($q) {
-            $q->where('role', 'pedagang');
-        });
+        // // Filter by user_id yang rolenya pedagang
+        // $query->whereHas('user', function($q) {
+        //     $q->where('role', 'pedagang');
+        // });
+        $query = Purchase::query()->with('user.role');
+
+    // Filter pedagang yang benar melalui relasi role_id
+    $query->whereHas('user.role', function($q) {
+        $q->where('name', 'pedagang'); 
+    });
 
         // Filter by user_id spesifik
         if ($request->user_id) {

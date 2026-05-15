@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
     $table->id();
-    $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+    $table->foreignId('user_id')->constrained('users_')->onDelete('cascade');
     $table->timestamp('effective_date')->nullable(); // Tanggal efektif
     $table->string('product_name');
     $table->text('product_description')->nullable();
