@@ -8,88 +8,81 @@ use App\Http\Controllers\Api\OrderController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\PurchaseController;
 use App\Http\Controllers\Api\MonthlyExpenseController;
-
-
-Route::get('/products', [ProductController::class, 'index']);
-Route::post('/products', [ProductController::class, 'store']);
-
-// Route Publik (Bisa diakses tanpa login)
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-
-// Route Terproteksi (Harus bawa Token)
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
-    
-});
-//dashboard
-
-Route::get('/dashboard/seller', fn() => view('dashboard.dashboard_seller'));
-
-// Route Forgot Password (Opsi A)
-Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-Route::post('/reset-password', [AuthController::class, 'resetPassword']);
-
-
-
-// Logout harus di dalam sini karena kita perlu tahu siapa yang logout
-Route::post('/logout', [AuthController::class, 'logout']);
-
-// Endpoint Update Profile (BARU)
-Route::put('/user/profile', [AuthController::class, 'updateProfile']);
-
-// Endpoint Management User
-Route::get('/users', [AuthController::class, 'getAllUsers']);
-Route::get('/users/search', [AuthController::class, 'getUserByEmail']);
-Route::get('/users/{id}', [AuthController::class, 'getUserById']);
-
-// Jika kamu ingin namanya 'carts' (pakai s), tulis begini:
-Route::post('/carts', [CartController::class, 'addToCart']);
-Route::get('/carts', [CartController::class, 'getMyCart']);
-Route::post('/user/qris', [AuthController::class, 'updateQris']);
-
-// Untuk Konsumen
-Route::post('/orders', [OrderController::class, 'store']);      // Buat pesanan baru
-Route::get('/orders/history', [OrderController::class, 'index']); // Lihat riwayat belanja
-
-// Untuk Pedagang (Merchant)
-Route::get('/merchant/orders', [OrderController::class, 'merchantIndex']); // List pesanan masuk
-Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus']); // Update status (ongoing/completed/dll)
-
-
-// Route untuk mengambil SEMUA order (biasanya untuk Admin)
-Route::get('/orders', [OrderController::class, 'index']);
-
-// Route untuk membuat order baru (yang sudah kamu buat sebelumnya)
-Route::post('/orders', [OrderController::class, 'store']);
-
-// Route untuk history belanja USER (Pelanggan)
-Route::get('/orders/user/{id}', [OrderController::class, 'getByUserId']);
-
-// Route untuk pesanan masuk MERCHANT (Warung)
-Route::get('/orders/merchant/{id}', [OrderController::class, 'getByMerchantId']);
-
-// Route untuk update status (PUT/PATCH)
-Route::patch('/orders/{id}/status', [OrderController::class, 'updateStatus']);
-
-Route::apiResource('products', ProductController::class);
-Route::get('/healthz', function () {
-    return response('OK', 200);
-});
 use Illuminate\Support\Facades\Artisan;
 
+// ============================================================
+// PUBLIC ROUTES (Tidak perlu token)
+// ============================================================
+
+// Auth
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login',    [AuthController::class, 'login']);
+
+// Forgot & Reset Password
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password',  [AuthController::class, 'resetPassword']);
+
+// Products (publik, bisa dilihat tanpa login)
+Route::get('/products',      [ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
+
+// Health Check
+Route::get('/healthz', fn() => response('OK', 200));
+
+// Emergency Migrate (development only, hapus di production)
 Route::get('/emergency-migrate', function () {
     try {
         Artisan::call('migrate --force');
         Artisan::call('config:clear');
-        return response()->json(['message' => 'Migration Success', 'output' => Artisan::output()]);
+        return response()->json([
+            'message' => 'Migration Success',
+            'output'  => Artisan::output()
+        ]);
     } catch (\Exception $e) {
         return response()->json(['error' => $e->getMessage()], 500);
     }
 });
 
-Route::apiResource('purchases', PurchaseController::class);
-Route::apiResource('expenses', MonthlyExpenseController::class);
+
+// ============================================================
+// PROTECTED ROUTES (Harus bawa token)
+// ============================================================
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    // --- User ---
+    Route::get('/user', fn(Request $request) => $request->user());
+
+    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
+    Route::post('/user/qris',   [AuthController::class, 'updateQris']);
+    Route::post('/logout',      [AuthController::class, 'logout']);
+
+    // --- User Management ---
+    Route::get('/users',         [AuthController::class, 'getAllUsers']);
+    Route::get('/users/search',  [AuthController::class, 'getUserByEmail']);
+    Route::get('/users/{id}',    [AuthController::class, 'getUserById']);
+
+    // --- Products (CRUD butuh login) ---
+    Route::post('/products',        [ProductController::class, 'store']);
+    Route::put('/products/{id}',    [ProductController::class, 'update']);
+    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+
+    // --- Cart ---
+    Route::post('/carts', [CartController::class, 'addToCart']);
+    Route::get('/carts',  [CartController::class, 'getMyCart']);
+
+    // --- Orders (Konsumen) ---
+    Route::post('/orders',           [OrderController::class, 'store']);
+    Route::get('/orders/history',    [OrderController::class, 'index']);
+    Route::get('/orders/user/{id}',  [OrderController::class, 'getByUserId']);
+
+    // --- Orders (Pedagang) ---
+    Route::get('/merchant/orders',         [OrderController::class, 'merchantIndex']);
+    Route::get('/orders/merchant/{id}',    [OrderController::class, 'getByMerchantId']);
+    Route::patch('/orders/{id}/status',    [OrderController::class, 'updateStatus']);
+
+    // --- Purchases & Expenses ---
+    Route::apiResource('purchases', PurchaseController::class);
+    Route::apiResource('expenses',  MonthlyExpenseController::class);
+
+});
