@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Pesanan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dashboard-body">
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <img src="1x/Asset 13.png" alt="Menu" class="img-burger" onclick="openNav()">
+        </div>
+        <div class="user-info">
+            <span>Hallo, Bimo Refka</span>
+            <div class="profile-icon">
+                <img src="1x/Asset 11.png" alt="profile-icon">
+            </div>
+        </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+
+        <div class="history-group">
+            <div class="date-header">27, April</div>
+
+            <div class="history-card">
+                <div class="history-img-box">
+                    <img src="1x/ayam bakar.jpg" alt="Ayam Bakar">
+                </div>
+                <div class="history-info">
+                    <h3>Ayam Bakar</h3>
+                    <p>Ayam bakar dengan sambal menggoda janda pirang</p>
+                </div>
+                <div class="history-price">Rp. 20.000.00</div>
+            </div>
+
+            <div class="history-card">
+                <div class="history-img-box">
+                    <img src="1x/ayam goreng.jpg" alt="Ayam Goreng">
+                </div>
+                <div class="history-info">
+                    <h3>Ayam Goreng</h3>
+                    <p>Ayam Goreng dengan sambal menggoda janda pirang</p>
+                </div>
+                <div class="history-price">Rp. 20.000.00</div>
+            </div>
+        </div>
+
+        <div class="history-group">
+            <div class="date-header">25, April</div>
+
+            <div class="history-card">
+                <div class="history-img-box">
+                    <img src="1x/es jeruk.jpg" alt="Es Jeruk">
+                </div>
+                <div class="history-info">
+                    <h3>Es Jeruk</h3>
+                    <p>Jerus perasan bangladesh</p>
+                </div>
+                <div class="history-price">Rp. 5.000.00</div>
+            </div>
+        </div>
+
+        <div class="history-group">
+            <div class="date-header">23, April</div>
+
+            <div class="history-card">
+                <div class="history-img-box">
+                    <img src="1x/ayam bakar.jpg" alt="Ayam Bakar">
+                </div>
+                <div class="history-info">
+                    <h3>Ayam Bakar</h3>
+                    <p>Ayam bakar dengan sambal menggoda janda pirang</p>
+                </div>
+                <div class="history-price">Rp. 20.000.00</div>
+            </div>
+        </div>
+
+    </div>
+    <div id="overlay" class="overlay" onclick="closeNav()"></div>
+
+    <div id="mySidebar" class="sidebar">
+        <div class="sidebar-content">
+            <a href="hlm_pembeli.html" onclick="closeNav()">Menu Makanan</a>
+            <a href="status_pesanan.html">Status Pesanan</a>
+            <a href="riwayat_pesanan.html">Riwayat Pesanan</a>
+        </div>
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+
+</body>
+
+</html>
