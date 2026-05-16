@@ -202,6 +202,7 @@ async function getProducts(){
         const result  = await res.json();
         allProducts   = result.data; // simpan semua produk
         const habisSet    = getProdukHabis();
+        const storeOpen = localStorage.getItem("store_open") === "1";
         const gridMakanan = document.getElementById("gridMakanan");
         const gridMinuman = document.getElementById("gridMinuman");
         gridMakanan.innerHTML = "";
@@ -209,12 +210,17 @@ async function getProducts(){
 
         result.data.forEach(p => {
             const isHabis = habisSet.has(p.id);
+            const isStoreClosed = !storeOpen;
             const imgSrc  = p.gambar_url || `https://picsum.photos/200/200?random=${p.id}`;
 
             const card = document.createElement("div");
-            card.className = "card" + (isHabis ? " habis" : "");
+            card.className =
+            "card" +
+            ((isHabis || isStoreClosed) ? " habis" : "");
             card.innerHTML = `
-                <div class="badge-habis">HABIS</div>
+                <div class="badge-habis">
+                    ${isStoreClosed ? 'TUTUP' : 'HABIS'}
+                </div>
                 <div class="card-left">
                     <div class="menu-name">${p.nama_menu}</div>
                     <div class="menu-desc">${p.deskripsi ?? 'Menu tersedia'}</div>
@@ -222,10 +228,10 @@ async function getProducts(){
                 </div>
                 <div class="card-right">
                     <img src="${imgSrc}" alt="${p.nama_menu}">
-                    <button class="btn-cart"
+                   <button class="btn-cart"
                         onclick="pilihMenu(${p.id})"
-                        ${isHabis ? 'disabled' : ''}>
-                        ${isHabis ? 'Habis' : 'Tambah'}
+                        ${(isHabis || isStoreClosed) ? 'disabled' : ''}>
+                        ${isStoreClosed ? 'Tutup' : (isHabis ? 'Habis' : 'Tambah')}
                     </button>
                 </div>
             `;

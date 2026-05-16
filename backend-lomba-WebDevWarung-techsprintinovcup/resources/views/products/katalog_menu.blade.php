@@ -302,9 +302,6 @@ html, body{
 </head>
 <body>
 
-<!-- PAGE TITLE -->
-<div class="page-title">Tambah Menu</div>
-
 <!-- NAVBAR -->
 <div class="navbar">
     <div class="nav-icons">
