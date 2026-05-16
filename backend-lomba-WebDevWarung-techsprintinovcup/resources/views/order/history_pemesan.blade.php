@@ -220,6 +220,30 @@
             white-space: nowrap;
             color: #ffffff;
         }
+
+        .history-status{
+    margin-top:8px;
+    display:inline-block;
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:700;
+}
+
+.status-pending{
+    background:rgba(255,184,0,0.2);
+    color:#ffb800;
+}
+
+.status-diproses{
+    background:rgba(20,184,20,0.2);
+    color:#14ff72;
+}
+
+.status-selesai{
+    background:rgba(255,255,255,0.2);
+    color:white;
+}
     </style>
 </head>
 
@@ -248,62 +272,197 @@
 
 </div>
 
-    <div class="main-container">
+    <div class="main-container" id="historyContainer">
 
-        <div class="history-group">
-            <div class="date-header">tanggal</div>
-
-            <div class="history-card">
-                <!-- <div class="history-img-box">
-                    <img src="{{ asset('1x/ayam bakar.jpg') }}" alt="Ayam Bakar">
-                </div>
-                <div class="history-info">
-                    <h3>Ayam Bakar</h3>
-                    <p>Ayam bakar dengan sambal menggoda janda pirang</p>
-                </div>
-                <div class="history-price">Rp. 20.000,00</div> -->
-            </div>
-
-            <div class="history-card">
-                <!-- <div class="history-img-box">
-                    <img src="{{ asset('1x/ayam goreng.jpg') }}" alt="Ayam Goreng">
-                </div>
-                <div class="history-info">
-                    <h3>Ayam Goreng</h3>
-                    <p>Ayam Goreng dengan sambal menggoda janda pirang</p>
-                </div>
-                <div class="history-price">Rp. 20.000,00</div> -->
-            </div>
-        </div>
-
-        <div class="history-group">
-            <div class="date-header">Tanggal</div>
-
-            <div class="history-card">
-                <!-- <div class="history-img-box">
-                    <img src="{{ asset('1x/es jeruk.jpg') }}" alt="Es Jeruk">
-                </div>
-                <div class="history-info">
-                    <h3>Es Jeruk</h3>
-                    <p>Jeruk perasan bangladesh asli segar</p>
-                </div>
-                <div class="history-price">Rp. 5.000,00</div> -->
-            </div>
-        </div>
+</div>
 
     </div>
 
     <script>
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "280px";
-            document.getElementById("overlay").style.display = "block";
+
+const token = localStorage.getItem("token");
+
+const authHeaders = {
+    "Accept":"application/json",
+    "Authorization":`Bearer ${token}`
+};
+
+function openNav() {
+    document.getElementById("mySidebar").style.width = "280px";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    document.getElementById("overlay").style.display = "none";
+}
+
+async function getHistory(){
+
+    try{
+
+        const res = await fetch(
+            "http://127.0.0.1:8000/api/orders/user/1",
+            {
+                headers:authHeaders
+            }
+        );
+
+        const result = await res.json();
+
+        console.log(result);
+
+        const container =
+            document.getElementById("historyContainer");
+
+        container.innerHTML = "";
+
+        if(!result || result.length === 0){
+
+            container.innerHTML = `
+                <div style="
+                    text-align:center;
+                    padding:80px;
+                    color:#777;
+                    font-size:18px;
+                ">
+                    Belum ada riwayat pesanan
+                </div>
+            `;
+
+            return;
         }
 
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-            document.getElementById("overlay").style.display = "none";
-        }
-    </script>
+        // GROUP BY TANGGAL
+        const grouped = {};
+
+        result.forEach(order => {
+
+            const date =
+                new Date(order.created_at)
+                .toLocaleDateString('id-ID',{
+                    day:'2-digit',
+                    month:'long',
+                    year:'numeric'
+                });
+
+            if(!grouped[date]){
+                grouped[date] = [];
+            }
+
+            grouped[date].push(order);
+
+        });
+
+        Object.keys(grouped).forEach(date => {
+
+            let html = `
+                <div class="history-group">
+
+                    <div class="date-header">
+                        ${date}
+                    </div>
+            `;
+
+            grouped[date].forEach(order => {
+
+                const items = order.items || [];
+
+                items.forEach(item => {
+
+                    const product = item.product || {};
+
+                    const img =
+    product.gambar
+        ? `http://127.0.0.1:8000/storage/${product.gambar}`
+        : "https://dummyimage.com/200x200/cccccc/000000&text=Menu";
+
+                    const localStatuses =
+                        JSON.parse(localStorage.getItem("order_statuses") || "{}");
+
+                    const finalStatus =
+                        localStatuses[order.id] ?? order.status_id;
+
+                    let statusClass = "status-pending";
+                    let statusText  = "Menunggu";
+
+                    if(finalStatus == 2){
+
+                        statusClass = "status-diproses";
+                        statusText  = "Diproses";
+
+                    }
+
+                    if(finalStatus == 4){
+
+                        statusClass = "status-selesai";
+                        statusText  = "Selesai";
+
+                    }
+
+                    if(finalStatus == 5){
+
+                        statusClass = "status-pending";
+                        statusText  = "Ditolak";
+
+                    }
+
+                    if(order.status_id == 4){
+                        statusClass = "status-selesai";
+                        statusText  = "Selesai";
+                    }
+
+                    html += `
+                        <div class="history-card">
+
+                            <div class="history-img-box">
+                                <img src="${img}">
+                            </div>
+
+                            <div class="history-info">
+
+                                <h3>
+                                    ${product.nama_menu || 'Menu'}
+                                </h3>
+
+                                <p>
+                                    Qty: ${item.quantity}
+                                </p>
+
+                                <div class="history-status ${statusClass}">
+                                    ${statusText}
+                                </div>
+
+                            </div>
+
+                            <div class="history-price">
+                                Rp.
+                                ${Number(item.price_at_purchase || 0)
+                                    .toLocaleString('id-ID')}
+                            </div>
+
+                        </div>
+                    `;
+                });
+
+            });
+
+            html += `</div>`;
+
+            container.innerHTML += html;
+
+        });
+
+    } catch(err){
+
+        console.error(err);
+
+    }
+}
+
+getHistory();
+
+</script>
 
 </body>
 

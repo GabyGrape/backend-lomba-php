@@ -127,8 +127,8 @@ body{ background:#e9e9e9; }
 <div id="mySidebar" class="sidebar">
     <div class="sidebar-content">
         <a href="/dashboard/consument" onclick="closeNav()">🍱 Menu</a>
-        <a href="#">📦 Status Pesanan</a>
-        <a href="#">🕑 Riwayat Pesanan</a>
+        <a href="/status-pesanan">📦 Status Pesanan</a>
+        <a href="/history-pemesan">🕑 Riwayat Pesanan</a>
     </div>
 </div>
 

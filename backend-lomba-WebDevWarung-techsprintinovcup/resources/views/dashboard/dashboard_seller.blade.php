@@ -18,12 +18,51 @@ body{ margin:0; background:#f2f2f2; }
 .circle-icon{ width:55px; height:55px; border-radius:50%; background:white; color:black; display:flex; justify-content:center; align-items:center; font-size:28px; margin:auto; margin-bottom:5px; font-weight:bold; }
 .profile-section{ display:flex; align-items:center; gap:15px; color:white; }
 .profile{ width:50px; height:50px; border-radius:50%; background:white; }
+.qris-section{
+    padding:30px;
+}
 
+.qris-box{
+    background:white;
+    padding:15px;
+    border-radius:18px;
+    width:190px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+.qris-box img{
+    width:100%;
+    height:150px;
+    object-fit:cover;
+    border-radius:12px;
+    margin-bottom:10px;
+}
+
+.qris-box input{
+    margin-bottom:15px;
+}
+
+.qris-box button{
+    width:100%;
+    padding:9px;
+    border:none;
+    border-radius:10px;
+    background:#0b2d75;
+    color:white;
+    font-weight:600;
+    font-size:12px;
+    cursor:pointer;
+}
 /* CONTENT */
 .content{ padding:30px; }
 .menu-title{ font-size:35px; font-weight:700; color:#333; margin-bottom:20px; }
 .top-bar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; }
-
+.kategori-title{
+    font-size:24px;
+    font-weight:700;
+    margin-bottom:15px;
+    color:#0b2d75;
+}
 /* SWITCH */
 .switch{ width:70px; height:35px; background:#0b2d75; border-radius:30px; position:relative; cursor:pointer; padding:5px; }
 .switch-circle{ width:25px; height:25px; background:red; border-radius:50%; position:absolute; left:5px; transition:0.3s; }
@@ -63,7 +102,22 @@ body{ margin:0; background:#f2f2f2; }
 .btn-selesai{ width:100%; border:none; padding:8px; border-radius:20px; color:white; font-size:11px; font-weight:700; cursor:pointer; background:#0b2d75; margin-top:6px; transition:0.2s; }
 .btn-selesai:hover{ background:#7286D3; }
 .order-empty{ color:#777; font-size:14px; padding:20px 0; }
+.order-list{
+    margin-top:10px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
 
+.order-item{
+    background:rgba(255,255,255,0.12);
+    padding:7px 10px;
+    border-radius:10px;
+    font-size:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
 /* Badge status */
 .order-status-badge{ display:inline-block; font-size:10px; font-weight:700; padding:3px 10px; border-radius:20px; margin-top:5px; }
 .badge-pending{ background:rgba(255,184,0,0.2); color:#ffb800; }
@@ -116,7 +170,28 @@ body{ margin:0; background:#f2f2f2; }
             <div class="profile"></div>
         </div>
     </div>
+<div class="qris-section">
+    <h2>QRIS Pembayaran</h2>
 
+    <div class="qris-box">
+        <img id="qrisPreview"
+             src="https://via.placeholder.com/250x250?text=Upload+QRIS">
+
+        <input type="file"
+               id="qrisFile"
+               accept="image/*">
+
+        <button onclick="uploadQris()">
+            Upload QRIS
+        </button>
+    </div>
+</div>
+
+<!-- PESANAN -->
+    <div class="order-section">
+        <div class="order-title">Daftar Pesanan</div>
+        <div class="order-grid" id="orderGrid"></div>
+    </div>
     <!-- PRODUK -->
     <div class="content">
         <div class="top-bar">
@@ -125,14 +200,14 @@ body{ margin:0; background:#f2f2f2; }
                 <div class="switch-circle"></div>
             </div>
         </div>
-        <div class="grid" id="menuGrid"></div>
+        <h2 class="kategori-title">🍜 Makanan</h2>
+        <div class="grid" id="makananGrid"></div>
+
+        <h2 class="kategori-title" style="margin-top:40px;">🥤 Minuman</h2>
+        <div class="grid" id="minumanGrid"></div>
     </div>
 
-    <!-- PESANAN -->
-    <div class="order-section">
-        <div class="order-title">Daftar Pesanan</div>
-        <div class="order-grid" id="orderGrid"></div>
-    </div>
+    
 </div>
 
 <!-- MODAL EDIT -->
@@ -162,7 +237,14 @@ body{ margin:0; background:#f2f2f2; }
 const user  = JSON.parse(localStorage.getItem("user"));
 const token = localStorage.getItem("token");
 if (!user || !token) window.location.href = "/login";
-document.getElementById("namaUser").textContent = `Hallo, ${user.name}`;
+document.getElementById("namaUser").innerHTML = `
+    <div style="font-weight:700;">
+        ${user.name}
+    </div>
+    <div style="font-size:12px;opacity:0.8;">
+        Pedagang
+    </div>
+`;
 
 const API_URL    = "http://127.0.0.1:8000/api/products";
 const API_ORDERS = "http://127.0.0.1:8000/api/orders/merchant/1";
@@ -172,7 +254,7 @@ const authHeaders = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`
 };
-
+let fallbackMenuImage = "";
 let editSelectedFile = null;
 const habisSet = new Set();
 
@@ -198,36 +280,85 @@ async function getProducts() {
     try {
         const res    = await fetch(API_URL, { headers: authHeaders });
         const result = await res.json();
-        const grid   = document.getElementById("menuGrid");
-        grid.innerHTML = "";
+        const makananGrid = document.getElementById("makananGrid");
+        const minumanGrid = document.getElementById("minumanGrid");
+
+        makananGrid.innerHTML = "";
+        minumanGrid.innerHTML = "";
         if (!result.data || result.data.length === 0) {
-            grid.innerHTML = '<div class="empty-state">Belum ada menu. Klik + Tambah Menu.</div>';
-            return;
-        }
-        result.data.forEach(p => renderCard(p, habisSet.has(p.id)));
+            makananGrid.innerHTML =
+            '<div class="empty-state">Belum ada menu makanan.</div>';
+
+        minumanGrid.innerHTML =
+            '<div class="empty-state">Belum ada menu minuman.</div>';
+                    return;
+                }
+
+        const firstWithImage = result.data.find(x => x.gambar_url);
+
+        fallbackMenuImage =
+            firstWithImage?.gambar_url || "";
+        result.data.forEach(p => {
+
+    const kategori = (p.category?.nama || "").toLowerCase();
+
+    if (kategori.includes("minuman")) {
+        renderCard(p, habisSet.has(p.id), "minumanGrid");
+    } else {
+        renderCard(p, habisSet.has(p.id), "makananGrid");
+    }
+});
     } catch(err) { console.error(err); }
 }
 
-function renderCard(p, isHabis) {
-    const grid   = document.getElementById("menuGrid");
-    const imgSrc = p.gambar_url || `https://picsum.photos/300/300?random=${p.id}`;
-    const card   = document.createElement("div");
+function renderCard(p, isHabis, targetGrid) {
+
+    const grid = document.getElementById(targetGrid);
+
+    const imgSrc =
+    p.gambar_url ||
+    fallbackMenuImage ||
+    "https://dummyimage.com/300x300/cccccc/000000&text=No+Image";
+    const card = document.createElement("div");
+
     card.className = "card" + (isHabis ? " habis" : "");
+
     card.id = `card-${p.id}`;
+
     card.innerHTML = `
         <div class="badge-habis">HABIS</div>
+
         <img src="${imgSrc}" alt="${p.nama_menu}">
+
         <div class="title">${p.nama_menu}</div>
+
         <div class="desc">${p.deskripsi || ''}</div>
-        <div class="price">Rp. ${Number(p.harga).toLocaleString('id-ID')}</div>
-        <div class="action">
-            <button class="btn edit" onclick="openEdit(${p.id},'${p.nama_menu}',${p.harga},${p.stok},'${imgSrc}')">Edit</button>
-            <button class="btn delete" onclick="deleteProduct(${p.id})">Delete</button>
+
+        <div class="price">
+            Rp. ${Number(p.harga).toLocaleString('id-ID')}
         </div>
-        <button class="btn-habis" id="btn-habis-${p.id}" onclick="toggleHabis(${p.id})">
+
+        <div class="action">
+            <button class="btn edit"
+                onclick="openEdit(${p.id},'${p.nama_menu}',${p.harga},${p.stok},'${imgSrc}')">
+                Edit
+            </button>
+
+            <button class="btn delete"
+                onclick="deleteProduct(${p.id})">
+                Delete
+            </button>
+        </div>
+
+        <button class="btn-habis"
+            id="btn-habis-${p.id}"
+            onclick="toggleHabis(${p.id})">
+
             ${isHabis ? '✅ Tandai Tersedia' : '🚫 Tandai Habis'}
+
         </button>
     `;
+
     grid.appendChild(card);
 }
 
@@ -313,10 +444,12 @@ async function getOrders() {
             // Override status dari localStorage jika ada
             let statusId = statuses[order.id] ?? order.status_id;
 
-            const item    = order.items?.[0];
-            if (!item) return;
-            const product = item?.product;
-            const imgSrc  = product?.gambar_url || `https://picsum.photos/300/300?random=${order.id}`;
+            const items = order.items || [];
+
+            if(items.length === 0) return;
+
+            const firstProduct = items[0]?.product;
+            const imgSrc  = firstProduct?.gambar_url || `https://picsum.photos/300/300?random=${order.id}`;
             const total   = "Rp. " + Number(order.total_price || 0).toLocaleString('id-ID');
 
             let statusBadge = '';
@@ -342,7 +475,19 @@ async function getOrders() {
             grid.innerHTML += `
                 <div class="order-card" id="order-card-${order.id}">
                     <img src="${imgSrc}" alt="menu">
-                    <div class="order-name">${product?.nama_menu || 'Menu'} x${item.quantity}</div>
+                    <div class="order-list">
+                        ${items.map(i => `
+                            <div class="order-item">
+                                <span>
+                                    🍽 ${i.product?.nama_menu || 'Menu'}
+                                </span>
+
+                                <span>
+                                    x${i.quantity}
+                                </span>
+                            </div>
+                        `).join("")}
+                    </div>
                     <div class="order-user">👤 ${order.customer?.name || 'Pemesan'}</div>
                     <div class="order-total">💰 ${total}</div>
                     ${statusBadge}
@@ -406,7 +551,56 @@ async function selesaikanOrder(id) {
         showToast("Tidak dapat terhubung ke server", true);
     }
 }
+document.getElementById('qrisFile').addEventListener('change', function(e){
+    const file = e.target.files[0];
 
+    if(file){
+        const reader = new FileReader();
+
+        reader.onload = function(ev){
+            document.getElementById('qrisPreview').src = ev.target.result;
+        }
+
+        reader.readAsDataURL(file);
+    }
+});
+
+async function uploadQris(){
+
+    const file = document.getElementById('qrisFile').files[0];
+
+    if(!file){
+        showToast("Pilih gambar QRIS dulu", true);
+        return;
+    }
+
+    const fd = new FormData();
+    fd.append("qris", file);
+
+    try{
+
+        const res = await fetch("http://127.0.0.1:8000/api/user/qris",{
+            method:"POST",
+            headers:{
+                "Authorization": `Bearer ${token}`,
+                "Accept":"application/json"
+            },
+            body:fd
+        });
+
+        const result = await res.json();
+
+        if(res.ok){
+            showToast("QRIS berhasil diupload ✅");
+        }else{
+            showToast(result.message || "Upload gagal", true);
+        }
+
+    }catch(err){
+        console.error(err);
+        showToast("Server error", true);
+    }
+}
 getProducts();
 getOrders();
 </script>

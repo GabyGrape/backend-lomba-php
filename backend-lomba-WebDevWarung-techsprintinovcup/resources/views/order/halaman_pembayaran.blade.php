@@ -82,23 +82,46 @@ document.addEventListener('DOMContentLoaded', function() {
             "Rp. " + Number(total).toLocaleString('id-ID');
     }
 
-    const orderId = lastOrder.data?.id || lastOrder.id;
-    if (orderId) {
-        document.getElementById("orderInfo").textContent = `Order #${orderId} • Menunggu Pembayaran`;
-    } else {
-        document.getElementById("orderInfo").textContent = "Silakan scan QRIS di bawah";
-    }
+   async function loadQris() {
 
-    const userData = JSON.parse(localStorage.getItem("user") || "{}");
-    const qrisUrl  = userData.qris_url || null;
-    if (qrisUrl) {
-        const img = document.getElementById("qrisImg");
-        img.src = qrisUrl;
-        img.style.display = "block";
-        document.getElementById("qrisPlaceholder").style.display = "none";
-        document.getElementById("btnDownload").href     = qrisUrl;
-        document.getElementById("btnDownload").download = "qris.png";
+    try {
+
+        const res = await fetch("http://127.0.0.1:8000/api/users/1");
+
+        const result = await res.json();
+
+        console.log(result);
+
+        // ambil qris url
+        const qrisUrl =
+            result.data?.qris_url ||
+            result.qris_url ||
+            result.data?.qris ||
+            null;
+
+        if (qrisUrl) {
+
+            const img = document.getElementById("qrisImg");
+
+            img.src = qrisUrl;
+
+            img.style.display = "block";
+
+            document.getElementById("qrisPlaceholder").style.display = "none";
+
+            document.getElementById("btnDownload").href = qrisUrl;
+
+            document.getElementById("btnDownload").download = "qris.png";
+        }
+
+    } catch(err) {
+
+        console.error("Gagal load QRIS:", err);
+
     }
+}
+
+loadQris();
 });
 </script>
 </body>
