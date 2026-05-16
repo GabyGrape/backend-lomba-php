@@ -1,4 +1,4 @@
-git <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -301,9 +301,6 @@ html, body{
 </style>
 </head>
 <body>
-
-<!-- PAGE TITLE -->
-<div class="page-title">Tambah Menu</div>
 
 <!-- NAVBAR -->
 <div class="navbar">
