@@ -253,16 +253,32 @@ public function resetPassword(Request $request) {
     /**
      * Ambil semua data user
      */
+// public function getAllUsers(Request $request) {
+//     // Cek apakah user yang login memiliki role admin atau developer
+//     // Sesuai dengan enum yang kamu buat sebelumnya
+//     if ($request->user()->role->name !== 'admin' && $request->user()->role->name !== 'developer') {
+//         return response([
+//             'message' => 'Forbidden: Anda tidak memiliki akses ke halaman ini.'
+//         ], 403); // 403 adalah kode error Forbidden
+//     }
+
+//     $users = User::all();
+//     return response([
+//         'message' => 'Berhasil mengambil semua data user',
+//         'data' => $users
+//     ], 200);
+// }
 public function getAllUsers(Request $request) {
-    // Cek apakah user yang login memiliki role admin atau developer
-    // Sesuai dengan enum yang kamu buat sebelumnya
-    if ($request->user()->role->name !== 'admin' && $request->user()->role->name !== 'developer') {
-        return response([
-            'message' => 'Forbidden: Anda tidak memiliki akses ke halaman ini.'
-        ], 403); // 403 adalah kode error Forbidden
+    $user = $request->user();
+    
+    // Gunakan optional chaining atau pastikan relasi ada
+    $roleName = $user->role->name ?? ''; 
+
+    if ($roleName !== 'admin' && $roleName !== 'developer') {
+        return response(['message' => 'Forbidden: Akses ditolak.'], 403);
     }
 
-    $users = User::all();
+    $users = User::with('role')->get(); // Sekalian load role-nya biar FE dapet datanya lengkap
     return response([
         'message' => 'Berhasil mengambil semua data user',
         'data' => $users
@@ -323,35 +339,95 @@ public function getAllUsers(Request $request) {
             'data' => $user
         ], 200);
     }
-    public function updateQris(Request $request)
+//     public function updateQris(Request $request)
+// {
+//     $request->validate([
+//         'qris_image' => 'required|image|mimes:png,jpg,jpeg|max:2048',
+//     ]);
+
+//     $user = $request->user();
+
+//     // // Proteksi Role
+//     // if ($user->role !== 'pedagang') {
+//     //     return response(['message' => 'Hanya pedagang yang memiliki QRIS'], 403);
+//     // }
+//     // PERBAIKAN DI SINI:
+//     // Jika $user->role mengembalikan objek model Role
+//     if (!$user->role || $user->role->name !== 'pedagang') { 
+//         return response(['message' => 'Hanya pedagang yang memiliki QRIS'], 403);
+//     }
+
+//     if ($request->hasFile('qris_image')) {
+//         // Hapus file lama jika ada (opsional agar storage tidak penuh)
+//         if ($user->qris_path && \Storage::disk('public')->exists($user->qris_path)) {
+//             \Storage::disk('public')->delete($user->qris_path);
+//         }
+
+//         // Simpan file baru ke folder public/qris
+//         $path = $request->file('qris_image')->store('qris', 'public');
+
+//         // Simpan path-nya ke database
+//         $user->update(['qris_path' => $path]);
+
+//         return response([
+//             'message' => 'QRIS berhasil diperbarui',
+//             'qris_url' => url('storage/' . $path) // URL untuk ditampilkan di FE
+//         ]);
+//     }
+// }
+public function updateQris(Request $request)
 {
+    // 1. Ambil user dari token
+    $userFromToken = $request->user();
+
+    if (!$userFromToken) {
+        return response(['message' => 'Unauthenticated.'], 401);
+    }
+
+    // 2. Validasi input
     $request->validate([
         'qris_image' => 'required|image|mimes:png,jpg,jpeg|max:2048',
     ]);
 
-    $user = $request->user();
+    // 3. Ambil data user lengkap dengan relasi role
+    $user = \App\Models\User::with('role')->find($userFromToken->id);
 
-    // Proteksi Role
-    if ($user->role !== 'pedagang') {
-        return response(['message' => 'Hanya pedagang yang memiliki QRIS'], 403);
+    // 4. Cek Role (Cara paling aman untuk menangani error "on string" atau "on null")
+    $userRole = $user->role;
+    $roleName = '';
+
+    if (is_object($userRole)) {
+        $roleName = $userRole->name; // Jika role adalah objek (Hasil relasi)
+    } else {
+        $roleName = (string) $userRole; // Jika role adalah string (Kolom di tabel users)
     }
 
+    if (strtolower($roleName) !== 'pedagang') {
+        return response([
+            'message' => 'Akses ditolak. Hanya pedagang yang dapat mengunggah QRIS.',
+            'role_anda' => $roleName
+        ], 403);
+    }
+
+    // 5. Proses Upload File
     if ($request->hasFile('qris_image')) {
-        // Hapus file lama jika ada (opsional agar storage tidak penuh)
+        // Hapus file lama jika ada untuk menghemat storage
         if ($user->qris_path && \Storage::disk('public')->exists($user->qris_path)) {
             \Storage::disk('public')->delete($user->qris_path);
         }
 
-        // Simpan file baru ke folder public/qris
+        // Simpan file ke folder storage/app/public/qris
         $path = $request->file('qris_image')->store('qris', 'public');
 
-        // Simpan path-nya ke database
+        // Update path di database
         $user->update(['qris_path' => $path]);
 
         return response([
             'message' => 'QRIS berhasil diperbarui',
-            'qris_url' => url('storage/' . $path) // URL untuk ditampilkan di FE
-        ]);
+            'qris_url' => url('storage/' . $path)
+        ], 200);
     }
+
+    return response(['message' => 'File tidak ditemukan'], 400);
 }
 }

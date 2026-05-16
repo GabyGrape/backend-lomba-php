@@ -38,6 +38,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // 4. Lihat semua (Admin)
     Route::get('cart/all', [CartController::class, 'index']);
     
+    Route::post('/user/qris', [AuthController::class, 'updateQris']);
+
 });
 //dashboard
 
@@ -63,7 +65,6 @@ Route::get('/users/{id}', [AuthController::class, 'getUserById']);
 // Jika kamu ingin namanya 'carts' (pakai s), tulis begini:
 Route::post('/carts', [CartController::class, 'addToCart']);
 Route::get('/carts', [CartController::class, 'getMyCart']);
-Route::post('/user/qris', [AuthController::class, 'updateQris']);
 
 // Untuk Konsumen
 Route::post('/orders', [OrderController::class, 'store']);      // Buat pesanan baru
