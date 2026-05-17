@@ -430,7 +430,7 @@ async function getHistory(){
 
         const res = await fetch(
             // `https://backend-lomba-php.onrender.com/api/orders/merchant/${user.id}`,
-            `https://backend-lomba-php.onrender.com/api/orders/user/${user.id}`,
+            `https://backend-lomba-php.onrender.com/api/orders`,
             {
                 headers:authHeaders
             }
