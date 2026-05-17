@@ -367,7 +367,7 @@ html, body{
 </div>
 
 <script>
-const API_URL = "http://localhost:8000/api/products";
+const API_URL = "https://backend-lomba-php.onrender.com/api/products";
 const user = JSON.parse(localStorage.getItem("user"));
 document.getElementById("namaUser").textContent = `Hallo, ${user.name}`;
 let selectedCategoryId = 1;

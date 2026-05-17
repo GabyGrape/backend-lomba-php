@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     try {
 
-        const res = await fetch("http://127.0.0.1:8000/api/users/1");
+        const res = await fetch("https://backend-lomba-php.onrender.com/api/users/1");
 
         const result = await res.json();
 

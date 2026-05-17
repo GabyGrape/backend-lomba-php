@@ -273,9 +273,9 @@ document.getElementById("namaUser").innerHTML = `
     </div>
 `;
 
-const API_URL    = "http://127.0.0.1:8000/api/products";
-const API_ORDERS = "http://127.0.0.1:8000/api/orders/merchant/1";
-const API_BASE   = "http://127.0.0.1:8000/api";
+const API_URL    = "https://backend-lomba-php.onrender.com/api/products";
+const API_ORDERS = "https://backend-lomba-php.onrender.com/api/orders/merchant/1";
+const API_BASE   = "https://backend-lomba-php.onrender.com/";
 const authHeaders = {
     "Accept": "application/json",
     "Content-Type": "application/json",

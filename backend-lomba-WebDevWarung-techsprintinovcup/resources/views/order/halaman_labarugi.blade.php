@@ -655,7 +655,7 @@
 </div>
 
 <script>
-    const API_BASE    = 'http://127.0.0.1:8000/api';
+    const API_BASE    = 'https://backend-lomba-php.onrender.com/api';
     const user = JSON.parse(localStorage.getItem("user"));
 const token = localStorage.getItem("token");
 if (!user || !token) window.location.href = "/login";

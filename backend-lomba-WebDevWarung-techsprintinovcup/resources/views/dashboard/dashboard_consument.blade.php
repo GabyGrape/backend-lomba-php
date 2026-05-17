@@ -178,8 +178,8 @@ if (!user || !token) window.location.href = "/login";
 
 document.getElementById("namaUser").textContent = `Hallo, ${user.name}`;
 
-const API_PRODUCTS = "http://127.0.0.1:8000/api/products";
-const API_ORDERS   = "http://127.0.0.1:8000/api/orders";
+const API_PRODUCTS = "https://backend-lomba-php.onrender.com/api/products";
+const API_ORDERS   = "https://backend-lomba-php.onrender.com/api/orders";
 const MERCHANT_ID  = 1; // sesuaikan dengan merchant_id yang aktif
 
 // Semua produk disimpan di sini biar bisa dicari saat pilih menu

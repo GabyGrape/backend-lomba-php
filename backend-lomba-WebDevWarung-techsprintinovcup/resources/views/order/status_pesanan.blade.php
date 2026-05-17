@@ -181,7 +181,7 @@
 
         // Kalau tidak ada di localStorage, fetch dari API
         try {
-            const res = await fetch("http://127.0.0.1:8000/api/orders", {
+            const res = await fetch("https://backend-lomba-php.onrender.com/api/orders", {
                 headers: {
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${token}`

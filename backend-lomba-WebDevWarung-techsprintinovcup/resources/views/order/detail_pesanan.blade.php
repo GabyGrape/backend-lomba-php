@@ -162,7 +162,7 @@ const user  = JSON.parse(localStorage.getItem("user"));
 const token = localStorage.getItem("token");
 if (!user || !token) window.location.href = "/login";
 
-const API_ORDERS  = "http://127.0.0.1:8000/api/orders";
+const API_ORDERS  = "https://backend-lomba-php.onrender.com/api/orders";
 const MERCHANT_ID = 1;
 
 const selectedProduct = JSON.parse(localStorage.getItem("selected_product") || "null");

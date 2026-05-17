@@ -305,7 +305,7 @@ async function getHistory(){
     try{
 
         const res = await fetch(
-            "http://127.0.0.1:8000/api/orders/user/1",
+            "https://backend-lomba-php.onrender.com/api/orders/user/1",
             {
                 headers:authHeaders
             }
@@ -377,7 +377,7 @@ async function getHistory(){
 
                     const img =
     product.gambar
-        ? `http://127.0.0.1:8000/storage/${product.gambar}`
+        ? `https://backend-lomba-php.onrender.com/storage/${product.gambar}`
         : "https://dummyimage.com/200x200/cccccc/000000&text=Menu";
 
                     const localStatuses =
