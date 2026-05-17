@@ -606,7 +606,7 @@ async function uploadQris(){
 
     try{
 
-        const res = await fetch("http://127.0.0.1:8000/api/user/qris",{
+        const res = await fetch("https://backend-lomba-php.onrender.com/api/user/qris",{
             method:"POST",
             headers:{
                 "Authorization": `Bearer ${token}`,
