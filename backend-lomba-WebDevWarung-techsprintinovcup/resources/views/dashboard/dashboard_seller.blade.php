@@ -275,7 +275,7 @@ document.getElementById("namaUser").innerHTML = `
 
 const API_URL    = "https://backend-lomba-php.onrender.com/api/products";
 const API_ORDERS = "https://backend-lomba-php.onrender.com/api/orders/merchant/1";
-const API_BASE   = "https://backend-lomba-php.onrender.com/";
+const API_BASE   = "https://backend-lomba-php.onrender.com/api/";
 const authHeaders = {
     "Accept": "application/json",
     "Content-Type": "application/json",
@@ -552,7 +552,7 @@ async function selesaikanOrder(id) {
     if (!confirm("Selesaikan pesanan ini?")) return;
 
     try {
-        const res = await fetch(`${API_BASE}/orders/${id}/complete`, {
+        const res = await fetch(`${API_BASE}orders/${id}/complete`, {
             method:  'POST',
             headers: authHeaders
         });
