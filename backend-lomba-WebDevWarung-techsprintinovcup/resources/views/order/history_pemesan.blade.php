@@ -252,9 +252,9 @@
 
     <div id="mySidebar" class="sidebar">
         <div class="sidebar-content">
-            <a href="dashboard_consument.blade.php">Menu Makanan</a>
-            <a href="status_pesanan.blade.php">Status Pesanan</a>
-            <a href="history_pemesan.blade.php" style="background-color: #ffb800; color: #001a57;">Riwayat Pesanan</a>
+            <a href="/dashboard/consument" onclick="closeNav()">🍱 Menu</a>
+            <a href="/status-pesanan" onclick="closeNav()">📦 Status Pesanan</a>
+            <a href="/history-pemesan" onclick="closeNav()" style="background-color:#ffb800; color:#001a57;">🕑 Riwayat Pesanan</a>
         </div>
     </div>
 
@@ -266,7 +266,7 @@
     </div>
 
     <div class="right-nav">
-        <div>Hallo, Nama Pengguna</div>
+        <div id="namaUser">Hallo, ...</div>
         <div class="profile"></div>
     </div>
 
@@ -281,7 +281,10 @@
     <script>
 
 const token = localStorage.getItem("token");
-
+// Tambahkan di bagian atas script, setelah deklarasi token
+const user = JSON.parse(localStorage.getItem("user"));
+if (!user || !token) window.location.href = "/login";
+document.getElementById("namaUser").textContent = `Hallo, ${user.name}`;
 const authHeaders = {
     "Accept":"application/json",
     "Authorization":`Bearer ${token}`

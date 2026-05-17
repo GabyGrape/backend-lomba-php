@@ -140,6 +140,33 @@ body{ margin:0; background:#f2f2f2; }
 /* Toast */
 .toast{ position:fixed; top:15px; right:15px; background:#1fae4b; color:white; padding:10px 18px; border-radius:10px; font-size:13px; font-weight:600; display:none; z-index:9999; box-shadow:0 4px 15px rgba(0,0,0,0.2); }
 .toast.err{ background:#cc0000; }
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .navbar {
+        height: auto;
+        flex-direction: column;
+        padding: 15px;
+        gap: 12px;
+    }
+    .nav-menu {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .circle-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 22px;
+    }
+    .profile-section { width: 100%; justify-content: center; }
+
+    .content, .order-section, .qris-section { padding: 15px; }
+    .grid, .order-grid { gap: 12px; }
+    .card, .order-card { width: 100%; }
+
+    .qris-box { width: 100%; }
+}
 </style>
 </head>
 <body>
@@ -575,7 +602,7 @@ async function uploadQris(){
     }
 
     const fd = new FormData();
-    fd.append("qris", file);
+    fd.append("qris_image", file);
 
     try{
 
@@ -589,7 +616,7 @@ async function uploadQris(){
         });
 
         const result = await res.json();
-
+        console.log(result);
         if(res.ok){
             showToast("QRIS berhasil diupload ✅");
         }else{

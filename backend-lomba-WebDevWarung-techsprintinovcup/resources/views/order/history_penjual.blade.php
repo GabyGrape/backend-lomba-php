@@ -280,6 +280,35 @@
     background:rgba(255,0,0,0.2);
     color:#ff8080;
 }
+
+@media (max-width: 768px) {
+    .navbar {
+        height: auto;
+        flex-direction: column;
+        padding: 15px;
+        gap: 12px;
+    }
+    .nav-menu {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .circle-icon { width: 44px; height: 44px; font-size: 20px; }
+    .profile-section { width: 100%; justify-content: center; }
+
+    .main-container { padding: 20px 15px; }
+    .history-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        gap: 12px;
+    }
+    .history-img-box img { width: 100%; height: 160px; border-radius: 12px; }
+    .history-price { align-self: flex-end; }
+
+    .more-options { padding: 0 15px; }
+    .dropdown-period { right: 15px; flex-wrap: wrap; }
+}
     </style>
 </head>
 
@@ -288,9 +317,10 @@
 
     <div id="mySidebar" class="sidebar">
         <div class="sidebar-content">
-            <a href="dashboard_consument.blade.php">Menu Makanan</a>
-            <a href="status_pesanan.blade.php">Status Pesanan</a>
-            <a href="history_pemesan.blade.php" style="background-color: #ffb800; color: #001a57;">Riwayat Pesanan</a>
+            <a href="/dashboard/seller" onclick="closeNav()">🏠 Dashboard</a>
+<a href="/menu/create" onclick="closeNav()">➕ Tambah Menu</a>
+<a href="/halaman-labarugi" onclick="closeNav()">💰 Laporan</a>
+<a href="/history-penjual" onclick="closeNav()" style="background-color:#ffb800; color:#001a57;">⟳ Riwayat Pesanan</a>
         </div>
     </div>
 
@@ -308,12 +338,11 @@
                 Tambah Menu
             </div>
 
-            <div class="menu-item">
+            <div class="menu-item" onclick="window.location.href='/halaman-labarugi'">
                 <div class="circle-icon">💰</div>
                 Laporan
             </div>
-
-            <div class="menu-item">
+            <div class="menu-item" onclick="window.location.href='/history-penjual'">
                 <div class="circle-icon">⟳</div>
                 Pesanan
             </div>
@@ -348,7 +377,12 @@
     <script>
 
 const token = localStorage.getItem("token");
+// Tambahkan di awal script
+const user = JSON.parse(localStorage.getItem("user"));
+if (!user || !token) window.location.href = "/login";
+document.getElementById("namaUser").textContent = `Hallo, ${user.name}`;
 
+function goToCreate() { window.location.href = "/menu/create"; }
 const authHeaders = {
     "Accept":"application/json",
     "Authorization":`Bearer ${token}`

@@ -401,6 +401,56 @@
         }
         .btn-modal-cetak:hover { background: #7286D3; }
         .btn-modal-cetak:active { transform: scale(0.97); }
+
+        @media (max-width: 768px) {
+    .navbar {
+        height: auto;
+        flex-direction: column;
+        padding: 15px;
+        gap: 12px;
+    }
+    .nav-menu {
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .circle-icon { width: 44px; height: 44px; font-size: 20px; }
+    .profile-section { width: 100%; justify-content: center; }
+
+    .filter-container {
+        padding: 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .btn-laporan-bulanan { margin-left: 0; width: 100%; justify-content: center; }
+    .btn-filter { width: 100%; }
+
+    .form-section { padding: 15px; }
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .btn-tambah { width: 100%; }
+
+    .table-section { padding: 15px 15px 0; }
+    .scroll-wrapper { overflow-x: auto; }
+    .main-table { min-width: 560px; }
+
+    .summary-section {
+        padding: 15px;
+        grid-template-columns: 1fr;
+    }
+    .calc-grid { grid-template-columns: 1fr; }
+    .calc-total-bar { grid-column: span 1; flex-direction: column; gap: 8px; }
+
+    .modal-box { max-width: 100%; border-radius: 14px; }
+    .modal-body { padding: 16px; }
+    .modal-header { padding: 16px 20px; }
+    .ops-row { flex-wrap: wrap; }
+    .ops-input-nominal { width: 100%; }
+    .modal-footer { flex-direction: column; }
+    .btn-modal-cetak, .btn-modal-batal { width: 100%; justify-content: center; }
+}
     </style>
 </head>
 <body>
@@ -426,7 +476,7 @@
         </div>
     </div>
     <div class="profile-section">
-        <div>Hallo, <strong>{{ auth()->user()->name ?? 'Pengguna' }}</strong></div>
+        <div id="namaUser">Hallo, ...</div>
         <div class="profile"></div>
     </div>
 </div>
@@ -606,7 +656,11 @@
 
 <script>
     const API_BASE    = 'http://127.0.0.1:8000/api';
-    const DEFAULT_UID = {{ auth()->id() ?? 1 }};
+    const user = JSON.parse(localStorage.getItem("user"));
+const token = localStorage.getItem("token");
+if (!user || !token) window.location.href = "/login";
+document.getElementById("namaUser").textContent = `Hallo, ${user.name}`;
+const DEFAULT_UID = user.id;
 
     // State untuk laporan bulanan
     const reportState = {

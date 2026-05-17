@@ -34,93 +34,73 @@ html, body{
     background:#efefef;
 }
 
-/* ================= NAVBAR ================= */
-.navbar{
-    width:100%;
+/* ===== NAVBAR ===== */
+.navbar {
     background:#002b7f;
-    padding:10px 20px;
+    height:90px;
     display:flex;
+    justify-content:space-between;
     align-items:center;
-    gap:8px;
+    padding:0 20px;
 }
-
-.nav-icons{
+.nav-menu {
     display:flex;
+    gap:25px;
     align-items:center;
-    gap:8px;
-    flex:1;
 }
-
-.nav-item{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:3px;
-    cursor:pointer;
-}
-
-.nav-circle{
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    background:#001f5b;
-    border:2.5px solid #ffffff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.nav-circle svg{
-    width:22px;
-    height:22px;
-    stroke:white;
-    fill:none;
-}
-
-.nav-circle.active{
-    background:#f5b800;
-    border-color:#f5b800;
-}
-
-.nav-circle.active svg{
-    stroke:#001f5b;
-}
-
-.nav-label{
-    font-size:9px;
-    color:white;
-    font-weight:500;
+.menu-item {
     text-align:center;
-}
-
-.nav-user{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-left:auto;
-}
-
-.nav-user-text{
-    font-size:13px;
     color:white;
-    font-weight:500;
+    font-size:10px;
+    cursor:pointer;
+    transition:transform 0.2s;
 }
-
-.nav-avatar{
-    width:42px;
-    height:42px;
+.menu-item:hover { transform:translateY(-3px); }
+.circle-icon {
+    width:55px; height:55px;
     border-radius:50%;
-    background:#ccd6f6;
-    border:2px solid white;
+    background:white; color:black;
+    display:flex; justify-content:center; align-items:center;
+    font-size:28px; margin:auto; margin-bottom:5px;
+    font-weight:bold;
+}
+.profile-section {
     display:flex;
     align-items:center;
-    justify-content:center;
+    gap:15px;
+    color:white;
+}
+.profile {
+    width:50px; height:50px;
+    border-radius:50%;
+    background:white;
 }
 
-.nav-avatar svg{
-    width:24px;
-    height:24px;
-    fill:#001f5b;
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .navbar {
+        height:auto;
+        flex-direction:column;
+        padding:15px;
+        gap:12px;
+    }
+    .nav-menu {
+        gap:10px;
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+    .circle-icon { width:44px; height:44px; font-size:22px; }
+    .profile-section { width:100%; justify-content:center; }
+
+    .content {
+        flex-direction:column;
+        padding:20px 15px;
+        gap:20px;
+    }
+    .right { width:100%; }
+    .image-box { width:100%; height:220px; }
+    .btn-area { flex-direction:column; align-items:center; }
+    .btn-batal, .btn-input { width:100%; padding:13px 0; text-align:center; }
 }
 
 /* ================= CONTENT ================= */
@@ -298,61 +278,40 @@ html, body{
 #statusMsg.success{ background:rgba(26,200,100,0.15); color:#1a9b5a; }
 #statusMsg.error  { background:rgba(220,50,50,0.15); color:#d63030; }
 
+
 </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
-    <div class="nav-icons">
+    <div class="nav-menu">
 
-        <div class="nav-item" onclick="window.location.href='/dashboard/seller'">
-            <div class="nav-circle">
-                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9.75L12 3l9 6.75V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.75z"/>
-                    <path d="M9 21V12h6v9"/>
-                </svg>
-            </div>
-            <div class="nav-label">Dashboard</div>
+        <div class="menu-item" onclick="window.location.href='/dashboard/seller'">
+            <div class="circle-icon">⌂</div>
+            Dashboard
         </div>
 
-        <div class="nav-item">
-            <div class="nav-circle active">
-                <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round">
-                    <path d="M12 5v14M5 12h14"/>
-                </svg>
-            </div>
-            <div class="nav-label">Tambah Menu</div>
+        <div class="menu-item">
+            <div class="circle-icon" style="background:#ffb800; color:#001a57;">+</div>
+            Tambah Menu
         </div>
 
-        <div class="nav-item">
-            <div class="nav-circle">
-                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    <path d="M3 9h18M9 21V9"/>
-                    <path d="M7 13h2M7 17h2M13 13h4M13 17h4"/>
-                </svg>
-            </div>
-            <div class="nav-label">Laporan Keuangan</div>
+        <div class="menu-item" onclick="window.location.href='/halaman-labarugi'">
+            <div class="circle-icon">💰</div>
+            Laporan
         </div>
 
-        <div class="nav-item">
-            <div class="nav-circle">
-                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 4v8l4 2"/>
-                    <circle cx="12" cy="12" r="9"/>
-                </svg>
-            </div>
-            <div class="nav-label">Riwayat Pesanan</div>
+        <div class="menu-item" onclick="window.location.href='/history-penjual'">
+            <div class="circle-icon">⟳</div>
+            Pesanan
         </div>
 
     </div>
 
-    <div class="nav-user">
-        <div class="nav-user-text">Hallo, Nama Pengguna</div>
-        <div class="nav-avatar">
-            <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-        </div>
+    <div class="profile-section">
+        <div id="namaUser">Hallo, ...</div>
+        <div class="profile"></div>
     </div>
 </div>
 
@@ -410,7 +369,7 @@ html, body{
 <script>
 const API_URL = "http://localhost:8000/api/products";
 const user = JSON.parse(localStorage.getItem("user"));
-document.querySelector(".nav-user-text").textContent = `Hallo, ${user.name}`;
+document.getElementById("namaUser").textContent = `Hallo, ${user.name}`;
 let selectedCategoryId = 1;
 let selectedFile = null;
 
