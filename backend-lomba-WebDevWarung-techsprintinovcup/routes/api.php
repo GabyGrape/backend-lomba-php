@@ -40,6 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::post('/user/qris', [AuthController::class, 'updateQris']);
 
+    Route::get('/orders/my-history', [OrderController::class, 'getUserHistory']); 
+    Route::get('/orders/merchant-incoming', [OrderController::class, 'getMerchantOrders']);
 });
 //dashboard
 
@@ -83,6 +85,12 @@ Route::post('/orders', [OrderController::class, 'store']);
 
 // Route untuk history belanja USER (Pelanggan)
 Route::get('/orders/user/{id}', [OrderController::class, 'getByUserId']);
+
+// Untuk Konsumen: Otomatis ambil data berdasarkan ID user dari Token
+    Route::get('/my-history', [OrderController::class, 'getUserHistory']); 
+    
+    // Untuk Pedagang: Otomatis ambil data berdasarkan ID merchant dari Token
+    Route::get('/my-orders', [OrderController::class, 'getMerchantOrders']);
 
 // Route untuk pesanan masuk MERCHANT (Warung)
 Route::get('/orders/merchant/{id}', [OrderController::class, 'getByMerchantId']);
