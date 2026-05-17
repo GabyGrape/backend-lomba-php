@@ -328,7 +328,7 @@
 
         <div class="nav-menu">
 
-            <div class="menu-item">
+            <div class="menu-item" onclick="window.location.href='/dashboard/seller'">
                 <div class="circle-icon">⌂</div>
                 Dashboard
             </div>
@@ -350,7 +350,7 @@
         </div>
 
         <div class="profile-section">
-            <div>Hallo, Nama Pengguna</div>
+            <div id="namaUser">Hallo, ...</div>
             <div class="profile"></div>
         </div>
 
@@ -516,29 +516,24 @@ function renderHistory(orders){
                         ? `http://127.0.0.1:8000/storage/${product.gambar}`
                         : "https://dummyimage.com/200x200/cccccc/000000&text=Menu";
 
-                let statusClass = "status-menunggu";
-                let statusText  = "Menunggu";
+                    const localStatuses = JSON.parse(localStorage.getItem("order_statuses") || "{}");
+                    const finalStatus = localStatuses[order.id] ?? order.status_id;
 
-                if(order.status_id == 2){
+                    let statusClass = "status-menunggu";
+                    let statusText  = "Menunggu";
 
-                    statusClass = "status-diterima";
-                    statusText  = "Diterima";
-
-                }
-
-                if(order.status_id == 4){
-
-                    statusClass = "status-selesai";
-                    statusText  = "Selesai";
-
-                }
-
-                if(order.status_id == 5){
-
-                    statusClass = "status-ditolak";
-                    statusText  = "Ditolak";
-
-                }
+                    if(finalStatus == 2){
+                        statusClass = "status-diterima";
+                        statusText  = "Diterima";
+                    }
+                    if(finalStatus == 4){
+                        statusClass = "status-selesai";
+                        statusText  = "Selesai";
+                    }
+                    if(finalStatus == 5){
+                        statusClass = "status-ditolak";
+                        statusText  = "Ditolak";
+                    }
 
                 html += `
                     <div class="history-card">
