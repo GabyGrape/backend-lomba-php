@@ -27,6 +27,10 @@ php artisan route:clear
 # # Jalankan migrasi secara otomatis
 # php artisan migrate --force
 
+# 3. Create Storage Link (TAMBAHKAN DI SINI)
+# Menggunakan --force untuk memastikan link dibuat ulang jika sudah ada link yang broken
+php artisan storage:link --force
+
 # # 2. Jalankan Seeder
 # # Gunakan --force karena ini lingkungan production
 # php artisan db:seed --force
