@@ -274,7 +274,7 @@ document.getElementById("namaUser").innerHTML = `
 `;
 
 const API_URL    = "https://backend-lomba-php.onrender.com/api/products";
-const API_ORDERS = "https://backend-lomba-php.onrender.com/api/orders/merchant/{user_id}";
+const API_ORDERS = "https://backend-lomba-php.onrender.com/api/orders/merchant/${user.id}";
 const API_BASE   = "https://backend-lomba-php.onrender.com/api/";
 const authHeaders = {
     "Accept": "application/json",
