@@ -146,6 +146,33 @@ public function getByUserId($id) {
     return response()->json($orders);
 }
 
+// public function getUserHistory(Request $request) {
+//     // Tidak perlu kirim ID di URL, ambil langsung dari user yang login
+//     return Order::where('user_id', $request->user()->id)->with('items.product')->get();
+// }
+
+// public function getMerchantOrders(Request $request) {
+//     return Order::where('merchant_id', $request->user()->id)->with('items.product', 'customer')->get();
+// }
+public function getUserHistory(Request $request) {
+    // Mengambil order di mana user ini adalah pembelinya
+    $orders = Order::where('user_id', $request->user()->id)
+        ->with(['items.product', 'merchant']) // sertakan data barang dan warungnya
+        ->latest()
+        ->get();
+
+    return response()->json($orders);
+}
+
+public function getMerchantOrders(Request $request) {
+    // Mengambil order yang masuk ke warung milik user ini
+    $orders = Order::where('merchant_id', $request->user()->id)
+        ->with(['items.product', 'customer']) // sertakan data barang dan siapa pembelinya
+        ->latest()
+        ->get();
+
+    return response()->json($orders);
+}
 // 3. Ambil Order masuk untuk Merchant (Dashboard Warung)
 public function getByMerchantId($id) {
     $orders = Order::where('merchant_id', $id)->with(['items.product', 'customer'])->latest()->get();
