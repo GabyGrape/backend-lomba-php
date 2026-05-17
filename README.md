@@ -49,7 +49,7 @@ Sektor usaha dagang mikro seperti warung sembako dan pedagang makanan kecil seri
 ## 📸 Antarmuka Aplikasi (Mockup UI)
 
 <p align="center">
-  <img src="path/to/your/mockup-image.png" alt="SiMudah Mockup Dashboard" width="800">
+  <img src="/MockUp Apps.png" alt="SiMudah Mockup Dashboard" width="800">
 </p>
 
 *Desain didominasi warna Biru untuk memberikan kesan profesional, bersih, dan tepercaya saat bertransaksi.*
