@@ -68,9 +68,9 @@ Sektor usaha dagang mikro seperti warung sembako dan pedagang makanan kecil seri
 
 Kami adalah tim mahasiswa dari **Politeknik Negeri Jakarta** yang berkomitmen menciptakan solusi nyata melalui baris kode:
 
-* **Asiwidia Simanjuntak** - [GitHub Profile](https://github.com/username-asiwidia)
-* **Bimo Refka Adiriski Saputra** - [GitHub Profile](https://github.com/username-bimo)
-* **Okta Gabriel Sinsaku Sinaga** - [GitHub Profile](https://github.com/username-okta)
+* **Asiwidia Simanjuntak** - [GitHub Profile](https://github.com/widia2807)
+* **Bimo Refka Adiriski Saputra** - [GitHub Profile](https://github.com/bimorefkaadiriskisaputratik24-maker)
+* **Okta Gabriel Sinsaku Sinaga** - [GitHub Profile](https://github.com/GabyGrape)
 
 ---
 <p align="center">Disusun untuk mengikuti <b>SiMudah TechSprint Innovation Cup</b> 🏆</p>
